@@ -1,0 +1,69 @@
+﻿<Project>
+	<Import Project="version.props" />
+	<PropertyGroup>
+		<!-- 设置目标框架为 .NET 10.0 -->
+		<TargetFramework>net10.0</TargetFramework>
+
+		<!-- 启用最新的 C# 语言功能 -->
+		<LangVersion>preview</LangVersion>
+
+		<!-- 启用可空引用类型 -->
+		<Nullable>enable</Nullable>
+
+		<!-- 启用隐式 using 指令 -->
+		<ImplicitUsings>enable</ImplicitUsings>
+
+		<!-- 启用原生 AOT 编译 -->
+		<PublishAot>true</PublishAot>
+
+		<!-- 剥离未使用的代码 -->
+		<PublishTrimmed>true</PublishTrimmed>
+
+		<!-- 启用服务器垃圾回收 -->
+		<ServerGarbageCollection>true</ServerGarbageCollection>
+
+		<!-- 启用并发垃圾回收 -->
+		<ConcurrentGarbageCollection>true</ConcurrentGarbageCollection>
+
+		<!-- 启用不安全的 BinaryFormatter 序列化 -->
+		<EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
+
+		<!-- 设置作者信息 -->
+		<Authors>Asprtu</Authors>
+
+		<!-- 设置产品名称 -->
+		<Product>Asprtu</Product>
+
+		<!-- 设置包前缀 -->
+		<PackagePrefix>Asprtu</PackagePrefix>
+
+		<!-- 设置包图标 -->
+		<PackageIcon>icon.png</PackageIcon>
+
+		<!-- 设置仓库 URL -->
+		<RepositoryUrl>https://github.com/Asprtu</RepositoryUrl>
+
+		<!-- 设置包项目 URL -->
+		<PackageProjectUrl>https://github.com/Asprtu</PackageProjectUrl>
+
+		<!-- 设置仓库类型 -->
+		<RepositoryType>git</RepositoryType>
+
+		<!-- 设置卫星资源语言 -->
+		<SatelliteResourceLanguages>zh-Hans</SatelliteResourceLanguages>
+		<SatelliteResourceLanguages>zh-Hant</SatelliteResourceLanguages>
+		<SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+
+		<!--启用所有的代码分析规则-->
+		<AnalysisMode>All</AnalysisMode>
+
+		<!-- 设置警告 -->
+		<NoWarn>$(NoWarn);1591;0436</NoWarn>
+
+		<!-- 生成文档文件 -->
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+
+		<!-- 允许重复的发布输出文件 -->
+		<ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
+	</PropertyGroup>
+</Project>

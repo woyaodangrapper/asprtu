@@ -1,0 +1,3 @@
+[submodule "src/Application/Asprtu.Capacities/RTU_Solution"]
+	path = src/Application/Asprtu.Capacities/RTU_Solution
+	url = https://github.com/woyaodangrapper/RTU_Solution.git

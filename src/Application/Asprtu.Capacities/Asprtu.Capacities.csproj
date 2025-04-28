@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\build\common.props" />
+
+	<ItemGroup>
+		<PackageReference Include="Castle.Core" Version="5.2.1" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.0-preview.3.25171.5" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.0-preview.3.25171.5" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\Infrastructures\Asprtu.Core\Asprtu.Core.csproj" />
+	</ItemGroup>
+
+
+</Project>

@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\build\common.props" />
+	<PropertyGroup>
+		<UserSecretsId>12c563fe-ae25-43ca-8b7f-d43c9e3ab872</UserSecretsId>
+		<OutputType>Exe</OutputType>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="Grpc.AspNetCore" Version="2.71.0-pre1" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\Infrastructures\Asprtu.gRPC\Asprtu.Grpc.csproj" />
+		<ProjectReference Include="..\Asprtu.Capacities\Asprtu.Capacities.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Protobuf Include="..\..\Infrastructures\Asprtu.Grpc\Protos\Capacities\*.proto" GrpcServices="Capacities" Link="Grpc\Protos\Capacities\%(RecursiveDir)%(Filename)%(Extension)" ProtoRoot="..\..\Infrastructures\Asprtu.Grpc\" />
+		<!--<Protobuf Include="..\..\Infrastructures\Asprtu.Grpc\Protos\Capacities\tcpgrpc.proto" GrpcServices="Capacities" Link="Grpc\Protos\Capacities\tcpgrpc.proto" ProtoRoot="..\..\Infrastructures\Asprtu.Grpc\" />-->
+	</ItemGroup>
+</Project>
