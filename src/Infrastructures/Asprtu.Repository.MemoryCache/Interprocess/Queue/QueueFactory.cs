@@ -19,7 +19,7 @@ public sealed class QueueFactory : IQueueFactory
         this.loggerFactory = CheckValue(loggerFactory, nameof(loggerFactory));
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc/>   
     public IPublisher CreatePublisher(QueueOptions options) =>
         new Publisher(CheckValue(options, nameof(options)), loggerFactory);
 

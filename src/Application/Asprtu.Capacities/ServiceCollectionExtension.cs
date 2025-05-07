@@ -1,7 +1,7 @@
-﻿using Asprtu.Application.Registrar;
+﻿using Asprtu.Capacities.Registrar;
 using Microsoft.Extensions.Hosting;
 
-namespace Asprtu.Application;
+namespace Asprtu.Capacities;
 
 
 public static class ServiceCollectionExtension

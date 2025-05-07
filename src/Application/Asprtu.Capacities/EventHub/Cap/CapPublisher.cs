@@ -1,4 +1,5 @@
-﻿using DotNetCore.CAP;
+﻿using Asprtu.Capacities.EventHub;
+using DotNetCore.CAP;
 
 namespace Aspire.EventHub.Cap;
 

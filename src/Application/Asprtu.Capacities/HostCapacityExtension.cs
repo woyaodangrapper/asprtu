@@ -1,4 +1,6 @@
-﻿namespace Microsoft.Extensions.Hosting;
+﻿using System.Reflection;
+
+namespace Microsoft.Extensions.Hosting;
 
 // Adds common .NET Aspire services: service discovery, resilience, health checks, and OpenTelemetry.
 // This project should be referenced by each service project in your solution.
@@ -19,5 +21,13 @@ public static class HostCapacityExtension
     //                  .WithImage("application")
     //                  .WithHttpEndpoint(targetPort: 8081);
     //}
+
+
+    public static void GetProtocolList(Action<Type> action)
+    {
+        AssemblyName[] referencedAssemblies = Assembly.GetExecutingAssembly().GetReferencedAssemblies();
+        IEnumerable<Assembly> assemblys = referencedAssemblies.Select(assembly => Assembly.Load(assembly.Name));
+        RTU.Infrastructures.Extensions.Util.GetProtocolList(action, assemblys);
+    }
 
 }

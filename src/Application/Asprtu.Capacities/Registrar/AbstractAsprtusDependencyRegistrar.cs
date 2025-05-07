@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Hosting;
 using System.Reflection;
 
-namespace Asprtu.Application.Registrar;
+namespace Asprtu.Capacities.Registrar;
 
 public abstract partial class AbstractAsprtusDependencyRegistrar : IDependency
 {

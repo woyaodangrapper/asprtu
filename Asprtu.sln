@@ -33,6 +33,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Asprtu.Repository.MemoryCac
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Asprtu.Repository.MemoryCache", "src\Infrastructures\Asprtu.Repository.MemoryCache\Asprtu.Repository.MemoryCache.csproj", "{C34763ED-9578-8F08-C4C2-B7A3C084AC77}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RUT", "RUT", "{D26A862E-C268-794D-9849-7BEF7AF07159}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RTU.Infrastructures", "src\Application\Asprtu.Capacities\RTU_Solution\src\RTU\Infrastructures\RTU.Infrastructures\RTU.Infrastructures.csproj", "{7133D6DC-5C3C-6905-2BC5-E875AED30F5F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RTU.TcpClient", "src\Application\Asprtu.Capacities\RTU_Solution\src\RTU\RTU.TcpClient\RTU.TcpClient.csproj", "{79DA0F78-70F3-DB0A-800B-3679EF1780A3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RTU.TcpServer", "src\Application\Asprtu.Capacities\RTU_Solution\src\RTU\RTU.TcpServer\RTU.TcpServer.csproj", "{1E3544D7-3DED-3398-EB2E-2FE1880F51F2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,6 +79,18 @@ Global
 		{C34763ED-9578-8F08-C4C2-B7A3C084AC77}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C34763ED-9578-8F08-C4C2-B7A3C084AC77}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C34763ED-9578-8F08-C4C2-B7A3C084AC77}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7133D6DC-5C3C-6905-2BC5-E875AED30F5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7133D6DC-5C3C-6905-2BC5-E875AED30F5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7133D6DC-5C3C-6905-2BC5-E875AED30F5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7133D6DC-5C3C-6905-2BC5-E875AED30F5F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79DA0F78-70F3-DB0A-800B-3679EF1780A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79DA0F78-70F3-DB0A-800B-3679EF1780A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79DA0F78-70F3-DB0A-800B-3679EF1780A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79DA0F78-70F3-DB0A-800B-3679EF1780A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E3544D7-3DED-3398-EB2E-2FE1880F51F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E3544D7-3DED-3398-EB2E-2FE1880F51F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E3544D7-3DED-3398-EB2E-2FE1880F51F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E3544D7-3DED-3398-EB2E-2FE1880F51F2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -86,10 +106,14 @@ Global
 		{29394813-B776-2026-C6F4-A655E406E89E} = {A773F282-EC71-4BDB-A876-E085D23C49A4}
 		{09EE02BB-B151-4DC7-9955-3A41C75878F8} = {CEBFA6DE-6440-46BC-8892-1318320B66F3}
 		{C34763ED-9578-8F08-C4C2-B7A3C084AC77} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{D26A862E-C268-794D-9849-7BEF7AF07159} = {A773F282-EC71-4BDB-A876-E085D23C49A4}
+		{7133D6DC-5C3C-6905-2BC5-E875AED30F5F} = {D26A862E-C268-794D-9849-7BEF7AF07159}
+		{79DA0F78-70F3-DB0A-800B-3679EF1780A3} = {D26A862E-C268-794D-9849-7BEF7AF07159}
+		{1E3544D7-3DED-3398-EB2E-2FE1880F51F2} = {D26A862E-C268-794D-9849-7BEF7AF07159}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {199B1B96-4F56-4828-9531-813BA02DB282}
-		RESX_Rules = {"EnabledRules":[]}
 		RESX_NeutralResourcesLanguage = zh-Hans
+		RESX_Rules = {"EnabledRules":[]}
 	EndGlobalSection
 EndGlobal

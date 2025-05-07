@@ -12,11 +12,10 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Aspire.Hosting.AppHost" Version="9.2.0" />
-		<PackageReference Include="DotNetCore.CAP" Version="8.3.3" />
 		<PackageReference Include="Vanara.PInvoke.Kernel32" Version="4.1.2" />
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\..\Infrastructures\Asprtu.Repository.MemoryCache\Asprtu.Repository.MemoryCache.csproj" IsAspireProjectResource="false"/>
+		<ProjectReference Include="..\Asprtu.Capacities\Asprtu.Capacities.csproj" IsAspireProjectResource="false" />
 		<ProjectReference Include="..\Asprtu.Capacities.Host\Asprtu.Capacities.Host.csproj" />
 	</ItemGroup>
 </Project>

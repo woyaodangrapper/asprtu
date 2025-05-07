@@ -2,7 +2,7 @@
 using DotNetCore.CAP;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Aspire.EventHub.Extensions;
+namespace Asprtu.Capacities.Extensions;
 
 public static class ServiceCollectionExtension
 {

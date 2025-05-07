@@ -1,7 +1,7 @@
 ﻿using DotNetCore.CAP.Filter;
 using Microsoft.Extensions.Logging;
 
-namespace Aspire.EventHub.Cap.Filters;
+namespace Asprtu.Capacities.EventHub.Cap.Filters;
 
 /// <summary>
 /// https://cap.dotnetcore.xyz/user-guide/zh/cap/filter/

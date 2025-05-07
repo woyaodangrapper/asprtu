@@ -21,6 +21,7 @@ internal abstract class Queue : IDisposable
             throw;
         }
 
+
         // must clean up if the application is being closed but finalizer is not called.
         // this happens in cases such as closing a console app by pressing the X button.
         AppDomain.CurrentDomain.ProcessExit += OnAppExit;

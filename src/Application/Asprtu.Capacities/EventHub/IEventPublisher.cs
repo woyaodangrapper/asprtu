@@ -1,4 +1,4 @@
-﻿namespace Aspire.EventHub;
+﻿namespace Asprtu.Capacities.EventHub;
 
 public interface IEventPublisher
 {

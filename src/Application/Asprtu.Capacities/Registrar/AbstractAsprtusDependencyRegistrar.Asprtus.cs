@@ -1,8 +1,7 @@
 ﻿using Asprtu.Core.Interfaces;
-using Castle.DynamicProxy;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Asprtu.Application.Registrar;
+namespace Asprtu.Capacities.Registrar;
 
 partial class AbstractAsprtusDependencyRegistrar
 {
@@ -13,23 +12,35 @@ partial class AbstractAsprtusDependencyRegistrar
     /// </summary>
     protected virtual void AddAsprtusCapacityLayer()
     {
+        //var serviceType = typeof(IAsprtu);
+        //var implTypes = ApplicationLayerAssembly.ExportedTypes.Where(type => type.IsAssignableTo(serviceType) && type.IsNotAbstractClass(true)).ToList();
+        //implTypes.ForEach(asprtuType =>
+        //{
+        //    var implType = ApplicationLayerAssembly.ExportedTypes.FirstOrDefault(type => type.IsAssignableTo(asprtuType) && type.IsNotAbstractClass(true));
+        //    if (implType is null)
+        //        return;
+        //    Builder.Services.AddScoped(asprtuType, provider =>
+        //    {
+        //        var interfaceToProxy = asprtuType;
+        //        var target = provider.GetService(implType);
+        //        var interceptors = DefaultInterceptorTypes.ConvertAll(interceptorType => provider.GetService(interceptorType) as IInterceptor).ToArray();
+        //        var proxyGenerator = provider.GetService<ProxyGenerator>();
+        //        var proxy = proxyGenerator.CreateInterfaceProxyWithTargetInterface(interfaceToProxy, target, interceptors);
+        //        return proxy;
+        //    });
+        //});
 
-        var serviceType = typeof(IAsprtu);
-        var implTypes = ApplicationLayerAssembly.ExportedTypes.Where(type => type.IsAssignableTo(serviceType) && type.IsNotAbstractClass(true)).ToList();
-        implTypes.ForEach(asprtuType =>
+
+        Type serviceType = typeof(IAsprtu);
+
+        IEnumerable<Type>? asprtuTypes = ApplicationLayerAssembly.ExportedTypes?
+            .Where(type => serviceType.IsAssignableFrom(type)
+                           && !type.IsInterface
+                           && !type.IsAbstract);
+        foreach (Type type in asprtuTypes ?? [])
         {
-            var implType = ApplicationLayerAssembly.ExportedTypes.FirstOrDefault(type => type.IsAssignableTo(asprtuType) && type.IsNotAbstractClass(true));
-            if (implType is null)
-                return;
-            Builder.Services.AddScoped(asprtuType, provider =>
-            {
-                var interfaceToProxy = asprtuType;
-                var target = provider.GetService(implType);
-                var interceptors = DefaultInterceptorTypes.ConvertAll(interceptorType => provider.GetService(interceptorType) as IInterceptor).ToArray();
-                var proxyGenerator = provider.GetService<ProxyGenerator>();
-                var proxy = proxyGenerator.CreateInterfaceProxyWithTargetInterface(interfaceToProxy, target, interceptors);
-                return proxy;
-            });
-        });
+            Builder.Services.AddScoped(typeof(IAsprtu), type);
+        }
+
     }
 }
