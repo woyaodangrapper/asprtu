@@ -6,7 +6,7 @@
 		<OutputType>Exe</OutputType>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Grpc.AspNetCore" Version="2.71.0-pre1" />
+		<PackageReference Include="Grpc.AspNetCore" Version="2.71.0" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\..\Infrastructures\Asprtu.gRPC\Asprtu.Grpc.csproj" />
