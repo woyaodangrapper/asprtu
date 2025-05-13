@@ -11,7 +11,7 @@ internal static class LaunchSettings
        where TBuilder : IHostApplicationBuilder
     {
         string? launchProfilePath = ProjectSourcePath.Value;
-        if (!string.IsNullOrEmpty(builder.Configuration["$schema"]))
+        if (!string.IsNullOrEmpty(builder.Configuration["DOTNET_RUNNING_IN_CONTAINER"]))
         {
             return builder;
         }

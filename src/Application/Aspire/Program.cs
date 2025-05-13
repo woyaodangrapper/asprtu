@@ -15,7 +15,7 @@ IDistributedApplicationBuilder builder = DistributedApplication.CreateBuilder(ar
 HostCapacityExtension.GetProtocolList((type) =>
 {
     int port = IPAddressExtensions.GenerateRandomPort();
-    _ = builder.AddProject<Projects.Asprtu_Capacities_Host>(type.Name)
+    _ = builder.AddProject<Projects.Asprtu_Capacities_Host>(type.Name.ToKebabCase())
         .WithEndpoint("http", endpoint =>
         {
             endpoint.Port = port;
@@ -26,6 +26,7 @@ HostCapacityExtension.GetProtocolList((type) =>
             endpoint.Port = port + 1;
             endpoint.IsProxied = false;
         })
+        //.WithEndpoint(name: "docs", scheme: "http")
         .WithUrlDocumentation()
         .WithEnvironment("DOTNET_RUNNING_IN_CONTAINER", "True");
 });

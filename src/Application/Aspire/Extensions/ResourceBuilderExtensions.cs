@@ -3,14 +3,21 @@
     internal static class ResourceBuilderExtensions
     {
         internal static IResourceBuilder<T> WithUrlDocumentation<T>(this IResourceBuilder<T> builder)
-            where T : IResource
+            where T : IResourceWithEndpoints
         {
-            return builder.WithUrls(context =>
+            return builder.WithEndpoint(name: "docs", scheme: "http").WithUrls(context =>
             {
-                context.Urls.ForEach(url =>
+
+                ResourceUrlAnnotation? annotation = context.Urls.SingleOrDefault((url)
+                    => StringComparer.OrdinalIgnoreCase.Equals("docs", url.Endpoint?.EndpointName
+                 ));
+
+                if (annotation is { } endpoint)
                 {
-                    url.Url += "/docs"; url.DisplayText = $"HTTP/1.1 OpenAPI Docs ({url.Url})";
-                });
+                    endpoint.Url += "/docs";
+                    endpoint.DisplayText = $"Project (docs)";
+                }
+
             });
         }
     }
