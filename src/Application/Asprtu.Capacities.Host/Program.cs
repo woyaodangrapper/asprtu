@@ -10,7 +10,7 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 // Add service defaults & Aspire client integrations.
 builder.AddHostDefaults().AddApiDocumentation().AddAsprtu();
-
+builder.AddEndpoints();
 
 bool inAspire =
     !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER")?.ToLower());
@@ -45,5 +45,7 @@ app.MapGrpcHealthChecksService();
 app.MapDefaultEndpoints();
 
 app.UseExceptionHandler();
+
+app.MapEndpoints();
 
 app.Run();

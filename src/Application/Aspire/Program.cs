@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using Aspire.Extensions;
+using Microsoft.Extensions.Hosting;
 using RTU.Infrastructures.Extensions;
 
 IDistributedApplicationBuilder builder = DistributedApplication.CreateBuilder(args);
@@ -19,13 +20,13 @@ HostCapacityExtension.GetProtocolList((type) =>
         {
             endpoint.Port = port;
             endpoint.IsProxied = false;
-            //endpoint.DisplayText = 
         })
         .WithEndpoint("https", endpoint =>
         {
             endpoint.Port = port + 1;
             endpoint.IsProxied = false;
         })
+        .WithUrlDocumentation()
         .WithEnvironment("DOTNET_RUNNING_IN_CONTAINER", "True");
 });
 

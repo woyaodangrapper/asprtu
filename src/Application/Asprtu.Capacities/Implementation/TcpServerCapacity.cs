@@ -1,7 +1,6 @@
 ﻿using Asprtu.Application.Contracts;
-using Asprtu.Capacities.Capacities;
 
-namespace Asprtu.Application.Asprtus;
+namespace Asprtu.Capacities.Implementation;
 
 public class TcpServerCapacity : AbstractCapacity, ITcpServer
 {

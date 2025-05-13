@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
-namespace Asprtu.Capacities.Capacities;
+namespace Asprtu.Capacities.Implementation;
 
 public abstract class AbstractCapacity : IAsprtu
 {
@@ -17,7 +17,7 @@ public abstract class AbstractCapacity : IAsprtu
     /// 封装的 Ok 结果。其基类为 <see cref="IResult"/>，
     /// 可被控制器或 Minimal API 使用，并兼容 AppResult 的统一响应封装策略。
     /// </returns>
-    protected Ok<T> Ok<T>(T value) => TypedResults.Ok(value);
+    protected static Ok<T> Ok<T>(T value) => TypedResults.Ok(value);
 
 
     /// <summary>
@@ -27,7 +27,7 @@ public abstract class AbstractCapacity : IAsprtu
     /// 封装的 Ok 结果。其基类为 <see cref="IResult"/>，
     /// 可被控制器或 Minimal API 使用，并兼容 AppResult 的统一响应封装策略。
     /// </returns>
-    protected Ok Ok() => TypedResults.Ok();
+    protected static Ok Ok() => TypedResults.Ok();
 
     /// <summary>
     /// 返回资源未找到结果（HTTP 404），附带提示信息
@@ -38,7 +38,7 @@ public abstract class AbstractCapacity : IAsprtu
     /// 封装的 NotFound 结果。其基类为 <see cref="IResult"/>，
     /// 可被控制器或 Minimal API 使用，并兼容 AppResult 的统一响应封装策略。
     /// </returns>
-    protected NotFound<T> NotFound<T>(T message) => TypedResults.NotFound(message);
+    protected static NotFound<T> NotFound<T>(T message) => TypedResults.NotFound(message);
 
     /// <summary>
     /// 返回资源未找到结果（HTTP 404），无提示信息
@@ -47,7 +47,7 @@ public abstract class AbstractCapacity : IAsprtu
     /// 封装的 NotFound 结果。其基类为 <see cref="IResult"/>，
     /// 可被控制器或 Minimal API 使用，并兼容 AppResult 的统一响应封装策略。
     /// </returns>
-    protected NotFound NotFound() => TypedResults.NotFound();
+    protected static NotFound NotFound() => TypedResults.NotFound();
 
     /// <summary>
     /// 返回请求错误结果（HTTP 400）
@@ -58,7 +58,7 @@ public abstract class AbstractCapacity : IAsprtu
     /// 封装的 BadRequest 结果。其基类为 <see cref="IResult"/>，
     /// 可被控制器或 Minimal API 使用，并兼容 AppResult 的统一响应封装策略。
     /// </returns>
-    protected BadRequest<string> BadRequest(string message) => TypedResults.BadRequest(message);
+    protected static BadRequest<string> BadRequest(string message) => TypedResults.BadRequest(message);
 
 
 
@@ -69,7 +69,7 @@ public abstract class AbstractCapacity : IAsprtu
     /// 封装的 BadRequest 结果。其基类为 <see cref="IResult"/>，
     /// 可被控制器或 Minimal API 使用，并兼容 AppResult 的统一响应封装策略。
     /// </returns>
-    protected BadRequest BadRequest() => TypedResults.BadRequest();
+    protected static BadRequest BadRequest() => TypedResults.BadRequest();
 
     /// <summary>
     /// 返回通用的错误信息（ProblemDetails），默认状态码为 500
@@ -77,7 +77,7 @@ public abstract class AbstractCapacity : IAsprtu
     /// <param name="detail">错误详情</param>
     /// <param name="statusCode">HTTP 状态码</param>
     /// <returns>封装的 ProblemDetails 结果</returns>
-    protected ProblemHttpResult Problem(string? detail = null, HttpStatusCode statusCode = HttpStatusCode.InternalServerError)
+    protected static ProblemHttpResult Problem(string? detail = null, HttpStatusCode statusCode = HttpStatusCode.InternalServerError)
     {
         ProblemDetails pd = new()
         {
@@ -95,7 +95,7 @@ public abstract class AbstractCapacity : IAsprtu
     /// <param name="ex">要处理的异常实例</param>
     /// <param name="statusCode">HTTP 状态码，默认 500</param>
     /// <returns>封装的 ProblemDetails 结果</returns>
-    protected ProblemHttpResult Problem(Exception ex, HttpStatusCode statusCode = HttpStatusCode.InternalServerError)
+    protected static ProblemHttpResult Problem(Exception ex, HttpStatusCode statusCode = HttpStatusCode.InternalServerError)
     {
         ProblemDetails pd = new()
         {
