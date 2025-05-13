@@ -4,6 +4,6 @@ namespace Asprtu.Application.Contracts;
 
 public interface ITcpServer : IAsprtu
 {
-    Task ProcessServerAsync(CancellationToken stoppingToken);
+    Task PistonAsync(CancellationToken stoppingToken);
 
 }

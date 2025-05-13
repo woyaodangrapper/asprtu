@@ -1,11 +1,10 @@
-﻿using Asprtu.Application.Contracts;
+﻿using Asprtu.Capacities.Capacities;
+using Asprtu.Capacities.Contracts;
 
 namespace Asprtu.Application.Asprtus;
 
 public class TcpClientCapacity : AbstractCapacity, ITcpClient
 {
-    public Task ProcessClientAsync(CancellationToken stoppingToken)
-    {
-        throw new NotImplementedException();
-    }
+    public Task PistonAsync(CancellationToken stoppingToken)
+      => throw new NotImplementedException();
 }

@@ -1,9 +1,8 @@
 ﻿using Asprtu.Core.Interfaces;
 
-namespace Asprtu.Application.Contracts;
+namespace Asprtu.Capacities.Contracts;
 
 public interface ITcpClient : IAsprtu
 {
-    Task ProcessClientAsync(CancellationToken stoppingToken);
-
+    Task PistonAsync(CancellationToken stoppingToken);
 }

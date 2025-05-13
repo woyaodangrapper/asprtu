@@ -2,6 +2,4 @@
 
 public interface IAsprtu
 {
-
-
 }
