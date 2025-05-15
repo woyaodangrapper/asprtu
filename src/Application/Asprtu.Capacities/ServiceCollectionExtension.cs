@@ -3,7 +3,6 @@ using Microsoft.Extensions.Hosting;
 
 namespace Asprtu.Capacities;
 
-
 public static class ServiceCollectionExtension
 {
     /// <summary>
@@ -17,5 +16,4 @@ public static class ServiceCollectionExtension
         new DependencyRegistrar(builder).AddAsprtus();
         return builder;
     }
-
 }
