@@ -1,7 +1,7 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-namespace Asprtu.Repository.MemoryCache;
+namespace Asprtu.Repository.MemoryCache.Interprocess.Memory;
 
 internal sealed unsafe class CircularBuffer
 {

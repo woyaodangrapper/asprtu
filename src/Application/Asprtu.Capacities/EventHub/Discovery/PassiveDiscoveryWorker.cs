@@ -1,4 +1,5 @@
-﻿using Asprtu.Core.Protocol;
+﻿using Asprtu.Core.Interfaces;
+using Asprtu.Core.Protocol;
 using Asprtu.Repository.MemoryCache;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -6,7 +7,7 @@ using Microsoft.Extensions.Logging;
 namespace Asprtu.Capacities.EventHub.Discovery;
 
 // 被动探测
-public class PassiveDiscoveryWorker : BackgroundService
+public class PassiveDiscoveryWorker : BackgroundService, IDiscovery
 {
     private readonly IQueueFactory _queueFactory;
 
@@ -15,8 +16,8 @@ public class PassiveDiscoveryWorker : BackgroundService
         capacity: 1024 * 1024);
 
     private readonly QueueOptions _importerOptions = new(
-       queueName: "blackbox_importer_registration",
-       capacity: 1024 * 1024);
+        queueName: "blackbox_importer_registration",
+        capacity: 1024 * 1024);
 
     private readonly long _userSecretsId = SnowflakeId.NewSnowflakeId();
 
@@ -62,14 +63,14 @@ public class PassiveDiscoveryWorker : BackgroundService
         {
             try
             {
-                var heartHandles = new HeartHandles(userSecretsId: _userSecretsId)
-                 .ToBytes(out var bytes);
-                publisher.TryEnqueue(bytes);
+                HeartHandles heartHandles = new HeartHandles(userSecretsId: _userSecretsId)
+                 .ToBytes(out byte[]? bytes);
+                _ = publisher.TryEnqueue(bytes);
 
                 // 等待握手
                 if (subscriber.Dequeue(token) is { } message)
                 {
-                    var register = new HeartHandles(message);
+                    HeartHandles register = new(message);
                     if (register.UserSecretsId == heartHandles.UserSecretsId)
                     {
                         return new(
@@ -83,7 +84,7 @@ public class PassiveDiscoveryWorker : BackgroundService
             {
                 break;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 await Task.Delay(1000, token);
             }
@@ -113,9 +114,9 @@ public class PassiveDiscoveryWorker : BackgroundService
         {
             try
             {
-                new HeartBeating(userSecretsId: _userSecretsId)
-                .ToBytes(out var bytes);
-                publisher.TryEnqueue(bytes);
+                _ = new HeartBeating(userSecretsId: _userSecretsId)
+                .ToBytes(out byte[]? bytes);
+                _ = publisher.TryEnqueue(bytes);
 
                 // 每隔 5 秒发送心跳
                 await Task.Delay(TimeSpan.FromSeconds(5), token);
@@ -124,7 +125,7 @@ public class PassiveDiscoveryWorker : BackgroundService
             {
                 break;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 await Task.Delay(1000, token);
             }

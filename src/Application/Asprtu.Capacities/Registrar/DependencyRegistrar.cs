@@ -12,10 +12,17 @@ public sealed class DependencyRegistrar(IHostApplicationBuilder builder) : Abstr
 
     public override void AddAsprtus()
     {
-        _ = Builder.Services.AddQueueFactory<byte[]>("TCP");
-        _ = Builder.Services.AddTcpServerFactory();
-        _ = Builder.Services.AddTcpClientFactory();
-        _ = Builder.Services.AddProtocolManifest();
+        _ = Builder.Services.AddTcpServerFactory()
+            .AddTcpClientFactory()
+            .AddProtocolManifest();
+
         AddAsprtusCapacityLayer();
+        AddApplicationHostedServices();
+    }
+
+    public IHostApplicationBuilder UseAsprtus()
+    {
+        AddAsprtus();
+        return Builder;
     }
 }

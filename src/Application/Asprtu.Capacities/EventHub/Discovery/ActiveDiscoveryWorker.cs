@@ -1,4 +1,5 @@
-﻿using Asprtu.Core.Protocol;
+﻿using Asprtu.Core.Interfaces;
+using Asprtu.Core.Protocol;
 using Asprtu.Repository.MemoryCache;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -7,7 +8,7 @@ using System.Collections.Concurrent;
 namespace Asprtu.Capacities.EventHub.Discovery;
 
 // 主动探测 使用 握手(1),心跳(N) 的内存结构
-public class ActiveDiscoveryWorker : BackgroundService
+public class ActiveDiscoveryWorker : BackgroundService, IDiscovery
 {
     private readonly IQueueFactory _queueFactory;
 
@@ -69,16 +70,16 @@ public class ActiveDiscoveryWorker : BackgroundService
                 // 接收握手包并发送握手包心跳偏移量
                 if (subscriber.Dequeue(token) is { } message)
                 {
-                    var register = new HeartHandles(message);
+                    HeartHandles register = new(message);
 
-                    var queueName = $"blackbox_heart_beating_{Math.Abs(register.GetHashCode())}_{register.UserSecretsId}";
+                    string queueName = $"blackbox_heart_beating_{Math.Abs(register.GetHashCode())}_{register.UserSecretsId}";
 
-                    var queueOptions = new QueueOptions(queueName: queueName, capacity: 1024 * 1024);
-                    _dictionary.TryAdd(register.UserSecretsId, new HeartbeatContext(HeartHandles: register, Option: queueOptions, Subscriber: _queueFactory.CreateSubscriber(queueOptions)));
+                    QueueOptions queueOptions = new(queueName: queueName, capacity: 1024 * 1024);
+                    _ = _dictionary.TryAdd(register.UserSecretsId, new HeartbeatContext(HeartHandles: register, Option: queueOptions, Subscriber: _queueFactory.CreateSubscriber(queueOptions)));
 
-                    new HeartHandles(heartbeatName: queueName, userSecretsId: (long)register.UserSecretsId)
-                        .ToBytes(out var bytes);
-                    publisher.TryEnqueue(bytes);
+                    _ = new HeartHandles(heartbeatName: queueName, userSecretsId: (long)register.UserSecretsId)
+                         .ToBytes(out byte[]? bytes);
+                    _ = publisher.TryEnqueue(bytes);
                 }
                 else
                 {
@@ -109,13 +110,13 @@ public class ActiveDiscoveryWorker : BackgroundService
     {
         while (!token.IsCancellationRequested)
         {
-            foreach (var key in _dictionary.Keys)
+            foreach (ulong key in _dictionary.Keys)
             {
                 if (_dictionary.TryGetValue(key, out var context))
                 {
                     if (context.Subscriber.TryDequeue(token, out var message))
                     {
-                        var register = new HeartBeating(message);
+                        HeartBeating register = new(message);
                         context.Timestamp = (long)register.Timestamp;
                     }
                 }
@@ -135,20 +136,20 @@ public class ActiveDiscoveryWorker : BackgroundService
     /// <returns></returns>
     private async Task CleanupLoopAsync(CancellationToken token)
     {
-        var _timeout = TimeSpan.FromSeconds(10).TotalMilliseconds;
+        double _timeout = TimeSpan.FromSeconds(10).TotalMilliseconds;
         while (!token.IsCancellationRequested)
         {
             try
             {
-                var now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+                long now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 
-                var expiredKey = _dictionary.Where(
+                IEnumerable<KeyValuePair<ulong, HeartbeatContext>> expiredKey = _dictionary.Where(
                     context => now - context.Value.Timestamp > _timeout
                 );
 
-                foreach (var item in expiredKey)
+                foreach (KeyValuePair<ulong, HeartbeatContext> item in expiredKey)
                 {
-                    _dictionary.TryRemove(item);
+                    _ = _dictionary.TryRemove(item);
                 }
 
                 await Task.Delay(TimeSpan.FromSeconds(5), token);
@@ -172,7 +173,7 @@ public class ActiveDiscoveryWorker : BackgroundService
         {
             if (disposing)
             {
-                foreach (var context in _dictionary.Values)
+                foreach (HeartbeatContext context in _dictionary.Values)
                 {
                     if (context.Subscriber is IDisposable disposable)
                     {
