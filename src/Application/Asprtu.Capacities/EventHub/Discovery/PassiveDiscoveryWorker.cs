@@ -35,10 +35,10 @@ public class PassiveDiscoveryWorker : BackgroundService, IDiscovery
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         // 发送握手消息
-        var queueOptions = await ReceiveLoop(stoppingToken).WaitAsync(TimeSpan.FromSeconds(30), stoppingToken);
+        QueueOptions? queueOptions = await ReceiveLoop(stoppingToken).WaitAsync(TimeSpan.FromSeconds(30), stoppingToken);
 
         // 心跳定时发送
-        var heartbeatTask = Task.Run(() => HeartbeatLoop(queueOptions, stoppingToken), stoppingToken);
+        Task heartbeatTask = Task.Run(() => HeartbeatLoop(queueOptions, stoppingToken), stoppingToken);
 
         await Task.WhenAll(heartbeatTask);
     }

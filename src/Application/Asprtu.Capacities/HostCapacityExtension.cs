@@ -7,7 +7,6 @@ namespace Microsoft.Extensions.Hosting;
 // To learn more about using this project, see https://aka.ms/dotnet/aspire/service-defaults
 public static class HostCapacityExtension
 {
-
     //public static IDistributedApplicationBuilder AddTcpServer(this IDistributedApplicationBuilder builder, string name)
     //{
     //    return builder.AddResource(new TcpServerResource(name))
@@ -22,12 +21,10 @@ public static class HostCapacityExtension
     //                  .WithHttpEndpoint(targetPort: 8081);
     //}
 
-
     public static void GetProtocolList(Action<Type> action)
     {
         AssemblyName[] referencedAssemblies = Assembly.GetExecutingAssembly().GetReferencedAssemblies();
         IEnumerable<Assembly> assemblys = referencedAssemblies.Select(assembly => Assembly.Load(assembly.Name));
         RTU.Infrastructures.Extensions.Util.GetProtocolList(action, assemblys);
     }
-
 }
