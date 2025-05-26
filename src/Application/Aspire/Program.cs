@@ -1,12 +1,10 @@
 ﻿using Aspire.Extensions;
 using Aspire.Onboarding;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using RTU.Infrastructures.Extensions;
 
 IDistributedApplicationBuilder builder = DistributedApplication.CreateBuilder(args);
-
+builder.AddDashboard();
 DefaultResource defaultResource = builder.CreateDefaultResource();
 //// 集群模式
 //List<Type> types = [];
@@ -16,24 +14,24 @@ DefaultResource defaultResource = builder.CreateDefaultResource();
 //       .WithReplicas(types.Count);
 
 // 单机模式
-HostCapacityExtension.GetProtocolList((type) =>
-{
-    int port = IPAddressExtensions.GenerateRandomPort();
-    _ = builder.AddProject<Projects.Asprtu_Capacities_Host>(type.Name.ToKebabCase())
-       .WithEndpoint("http", endpoint =>
-       {
-           endpoint.Port = port;
-           endpoint.IsProxied = false;
-       })
-       .WithEndpoint("https", endpoint =>
-       {
-           endpoint.Port = port + 1;
-           endpoint.IsProxied = false;
-       })
-       .WithUrlDocumentation()
-       .WithReferences(defaultResource)
-       .WithEnvironment("DOTNET_RUNNING_IN_CONTAINER", "True");
-});
+//HostCapacityExtension.GetProtocolList((type) =>
+//{
+//    int port = IPAddressExtensions.GenerateRandomPort();
+//    _ = builder.AddProject<Projects.Asprtu_Capacities_Host>(type.Name.ToKebabCase())
+//       .WithEndpoint("http", endpoint =>
+//       {
+//           endpoint.Port = port;
+//           endpoint.IsProxied = false;
+//       })
+//       .WithEndpoint("https", endpoint =>
+//       {
+//           endpoint.Port = port + 1;
+//           endpoint.IsProxied = false;
+//       })
+//       .WithUrlDocumentation()
+//       .WithReferences(defaultResource)
+//       .WithEnvironment("DOTNET_RUNNING_IN_CONTAINER", "True");
+//});
 
 Aspire.Contracts.INotifySuperiors Notify = defaultResource.Create();
 
@@ -68,5 +66,6 @@ builder.Eventing.Subscribe<AfterResourcesCreatedEvent>(
 
         logger.LogInformation("3. 资源创建事件之后");
     });
+builder.AddDockerComposeEnvironment("compose");
 
 builder.Build().Run();

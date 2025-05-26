@@ -6,8 +6,6 @@ namespace Asprtu.Capacities.Registrar;
 
 public abstract partial class AbstractAsprtusDependencyRegistrar : IDependency
 {
-    public string Name => "asprtus";
-
     public abstract Assembly ApplicationLayerAssembly { get; }
 
     public abstract IHostApplicationBuilder Builder { get; }

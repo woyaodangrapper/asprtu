@@ -1,12 +1,17 @@
 ﻿using Asprtu.Capacities;
 using Asprtu.Capacities.Host.Endpoints;
+using Asprtu.Capacities.Host.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Diagnostics;
 
-WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateSlimBuilder(args);
+
+//builder.Services.ConfigureHttpJsonOptions(options =>
+//{
+//    options.SerializerOptions.TypeInfoResolverChain.Insert(0, AppJsonSerializerContext.Default);
+//});
 
 // Add service defaults & Aspire client integrations.
 builder.AddHostDefaults()
@@ -36,7 +41,7 @@ app.MapGet("/", () =>
     "HTTP/1.1 OpenAPI 文档（跳转）：/docs"
 );
 
-app.MapGrpcService<TcpService>();
+app.MapGrpcService<TcpGrpc>();
 
 app.MapGrpcHealthChecksService();
 

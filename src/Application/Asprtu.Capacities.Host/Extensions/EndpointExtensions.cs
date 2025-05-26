@@ -1,8 +1,9 @@
 ﻿using Asprtu.Capacities.Host.Contracts;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace Microsoft.Extensions.DependencyInjection;
+namespace Asprtu.Capacities.Host.Extensions;
 
 public static class EndpointExtensions
 {

@@ -7,6 +7,8 @@ public class TcpEndpoint : IEndpoint
 {
     public void RegisterEndpoints(WebApplication app)
     {
-        app.MapGet("/weather", () => "Sunny today.");
+        Microsoft.AspNetCore.Routing.RouteGroupBuilder todosApi = app.MapGroup("/todos");
+
+        _ = todosApi.MapGet("/weather", () => "Sunny today.");
     }
 }

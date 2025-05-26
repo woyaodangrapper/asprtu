@@ -7,7 +7,11 @@ using OpenTelemetry;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
 
+#pragma warning disable IDE0130 // 为了明确扩展主体并减少冗余的扩展命名空间，特此抑制 IDE0130 警告。
+
 namespace Microsoft.Extensions.Hosting;
+#pragma warning restore IDE0130 // 为了明确扩展主体并减少冗余的扩展命名空间，特此抑制 IDE0130 警告。
+#pragma warning disable IDE0058 // 永远不会使用表达式值
 
 // Adds common .NET Aspire services: service discovery, resilience, health checks, and OpenTelemetry.
 // This project should be referenced by each service project in your solution.
@@ -38,16 +42,17 @@ public static class HostExtension
             // Turn on service discovery by default
             http.AddServiceDiscovery();
         });
+
         return builder;
     }
 
     public static IHostApplicationBuilder ConfigureOpenTelemetry(this IHostApplicationBuilder builder)
     {
         builder.Logging.AddOpenTelemetry(logging =>
-        {
-            logging.IncludeFormattedMessage = true;
-            logging.IncludeScopes = true;
-        });
+       {
+           logging.IncludeFormattedMessage = true;
+           logging.IncludeScopes = true;
+       });
 
         builder.Services.AddOpenTelemetry()
             .WithMetrics(metrics =>
@@ -77,7 +82,7 @@ public static class HostExtension
 
     private static IHostApplicationBuilder AddOpenTelemetryExporters(this IHostApplicationBuilder builder)
     {
-        var useOtlpExporter = !string.IsNullOrWhiteSpace(builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"]);
+        bool useOtlpExporter = !string.IsNullOrWhiteSpace(builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"]);
 
         if (useOtlpExporter)
         {
@@ -115,3 +120,5 @@ public static class HostExtension
         return app;
     }
 }
+
+#pragma warning restore IDE0058 // 永远不会使用表达式值

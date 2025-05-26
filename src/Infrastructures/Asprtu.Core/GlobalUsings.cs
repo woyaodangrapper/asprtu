@@ -1,2 +1,1 @@
-﻿global using Asprtu.Core.Interfaces;
-global using System.Reflection;
+﻿global using System.Reflection;

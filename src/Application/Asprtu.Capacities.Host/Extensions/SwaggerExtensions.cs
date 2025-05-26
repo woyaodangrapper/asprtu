@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Scalar.AspNetCore;
 
-namespace Microsoft.Extensions.DependencyInjection;
+namespace Asprtu.Capacities.Host.Extensions;
 
 public static class SwaggerExtensions
 {
-
     /// <summary>
     /// 配置 OpenAPI 文档提供第三方或集成中心。
     /// </summary>
@@ -19,7 +19,6 @@ public static class SwaggerExtensions
            .AddSwaggerGen()
            .AddEndpointsApiExplorer();
         return builder;
-
     }
 
     /// <summary>

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Hosting;
 
-namespace Microsoft.Extensions.DependencyInjection;
+namespace Asprtu.Capacities.Host.Extensions;
 
 public static class ExceptionHandlerExtensions
 {
@@ -17,6 +17,4 @@ public static class ExceptionHandlerExtensions
 
         return app;
     }
-
-
 }

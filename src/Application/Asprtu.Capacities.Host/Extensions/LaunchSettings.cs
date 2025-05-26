@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using System.Reflection;
 
-namespace Microsoft.Extensions.Hosting;
+namespace Asprtu.Capacities.Host.Extensions;
 
 internal static class LaunchSettings
 {
-
     internal static TBuilder UseLaunchSettings<TBuilder>(this TBuilder builder, string? resourceName = null)
        where TBuilder : IHostApplicationBuilder
     {
@@ -46,12 +46,11 @@ internal static class LaunchSettings
             string message = $"Failed to get effective launch profile for project resource '{resourceName}'. An unexpected error occurred while loading the launch settings file '{launchSettingsFilePath}': {ex.Message}";
             throw new FileNotFoundException(message, ex);
         }
-
     }
+
     internal static TBuilder UseKestrel<TBuilder>(this TBuilder builder)
        where TBuilder : IWebHostBuilder
     {
-
         // 通过builder.ConfigureServices获取IServiceCollection
         _ = builder.ConfigureServices((context, services) =>
          {
@@ -74,7 +73,6 @@ internal static class LaunchSettings
 
         return builder;
     }
-
 
     ///<summary>
     ///Provides the full path to the source directory of the current project.<br/>

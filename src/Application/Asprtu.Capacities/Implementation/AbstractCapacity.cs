@@ -1,12 +1,11 @@
-﻿using Asprtu.Core.Interfaces;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
 namespace Asprtu.Capacities.Implementation;
 
-public abstract class AbstractCapacity : IAsprtu
+public abstract class AbstractCapacity
 {
     /// <summary>
     /// 带结果的成功响应（HTTP 200），附带提示信息
@@ -18,7 +17,6 @@ public abstract class AbstractCapacity : IAsprtu
     /// 可被控制器或 Minimal API 使用，并兼容 AppResult 的统一响应封装策略。
     /// </returns>
     protected static Ok<T> Ok<T>(T value) => TypedResults.Ok(value);
-
 
     /// <summary>
     /// 成功响应（HTTP 200）
@@ -52,15 +50,12 @@ public abstract class AbstractCapacity : IAsprtu
     /// <summary>
     /// 返回请求错误结果（HTTP 400）
     /// </summary>
-    /// <typeparam name="T">返回的数据类型</typeparam>
     /// <param name="message">未找到的提示消息</param>
     /// <returns>
     /// 封装的 BadRequest 结果。其基类为 <see cref="IResult"/>，
     /// 可被控制器或 Minimal API 使用，并兼容 AppResult 的统一响应封装策略。
     /// </returns>
     protected static BadRequest<string> BadRequest(string message) => TypedResults.BadRequest(message);
-
-
 
     /// <summary>
     /// 返回请求错误结果（HTTP 400），无提示信息
@@ -110,5 +105,4 @@ public abstract class AbstractCapacity : IAsprtu
         };
         return TypedResults.Problem(pd);
     }
-
 }

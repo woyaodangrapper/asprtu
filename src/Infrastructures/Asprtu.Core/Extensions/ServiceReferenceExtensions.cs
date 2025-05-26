@@ -1,8 +1,12 @@
 ﻿using Grpc.Health.V1;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using System.Diagnostics.CodeAnalysis;
+
+#pragma warning disable IDE0130 // 为了明确扩展主体并减少冗余的扩展命名空间，特此抑制 IDE0130 警告。
 
 namespace System.Net.Http;
+#pragma warning restore IDE0130 // 为了明确扩展主体并减少冗余的扩展命名空间，特此抑制 IDE0130 警告。
 
 public static class ServiceReferenceExtensions
 {
@@ -18,19 +22,15 @@ public static class ServiceReferenceExtensions
     /// <param name="baseAddress">The value to assign to the <see cref="HttpClient.BaseAddress"/> property of the typed client's injected <see cref="HttpClient"/> instance.</param>
     /// <returns></returns>
     /// <exception cref="ArgumentException">Thrown when <paramref name="baseAddress"/> is not a valid URI value.</exception>
-    public static IHttpClientBuilder AddHttpServiceReference<TClient>(this IServiceCollection services, string baseAddress)
+    public static IHttpClientBuilder AddHttpServiceReference<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] TClient>(this IServiceCollection services, string baseAddress)
         where TClient : class
     {
         ArgumentNullException.ThrowIfNull(services);
 
-        if (!Uri.IsWellFormedUriString(baseAddress, UriKind.Absolute))
-        {
-            throw new ArgumentException("Base address must be a valid absolute URI.", nameof(baseAddress));
-        }
-
-        return services.AddHttpClient<TClient>(c => c.BaseAddress = new(baseAddress));
+        return !Uri.IsWellFormedUriString(baseAddress, UriKind.Absolute)
+            ? throw new ArgumentException("Base address must be a valid absolute URI.", nameof(baseAddress))
+            : services.AddHttpClient<TClient>(c => c.BaseAddress = new(baseAddress));
     }
-
 
     /// <summary>
     /// Adds an HTTP service reference. Configures a binding between the <typeparamref name="TClient"/> type and a named <see cref="HttpClient"/>
@@ -47,7 +47,7 @@ public static class ServiceReferenceExtensions
     /// <param name="failureStatus">The <see cref="HealthStatus"/> that should be reported if the health check fails. Defaults to <see cref="HealthStatus.Unhealthy"/>.</param>
     /// <returns>An <see cref="IHttpClientBuilder"/> that can be used to configure the client.</returns>
     /// <exception cref="ArgumentException">Thrown when <paramref name="baseAddress"/> or <paramref name="healthRelativePath"/> are not valid URI values.</exception>
-    public static IHttpClientBuilder AddHttpServiceReference<TClient>(this IServiceCollection services, string baseAddress, string healthRelativePath, string? healthCheckName = default, HealthStatus failureStatus = default)
+    public static IHttpClientBuilder AddHttpServiceReference<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] TClient>(this IServiceCollection services, string baseAddress, string healthRelativePath, string? healthCheckName = default, HealthStatus failureStatus = default)
         where TClient : class
     {
         ArgumentNullException.ThrowIfNull(services);
@@ -63,10 +63,10 @@ public static class ServiceReferenceExtensions
             throw new ArgumentException("Health check path must be a valid relative URI.", nameof(healthRelativePath));
         }
 
-        var uri = new Uri(baseAddress);
-        var builder = services.AddHttpClient<TClient>(c => c.BaseAddress = uri);
+        Uri uri = new(baseAddress);
+        IHttpClientBuilder builder = services.AddHttpClient<TClient>(c => c.BaseAddress = uri);
 
-        services.AddHealthChecks()
+        _ = services.AddHealthChecks()
             .AddUrlGroup(
                 new Uri(uri, healthRelativePath),
                 healthCheckName ?? $"{typeof(TClient).Name}-health",
@@ -90,7 +90,7 @@ public static class ServiceReferenceExtensions
     /// </param>
     /// <returns>An <see cref="IHttpClientBuilder"/> that can be used to configure the client.</returns>
     /// <exception cref="ArgumentException">Thrown when <paramref name="address"/> is not a valid URI value.</exception>
-    public static IHttpClientBuilder AddGrpcServiceReference<TClient>(this IServiceCollection services, string address)
+    public static IHttpClientBuilder AddGrpcServiceReference<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] TClient>(this IServiceCollection services, string address)
         where TClient : class
     {
         ArgumentNullException.ThrowIfNull(services);
@@ -100,7 +100,7 @@ public static class ServiceReferenceExtensions
             throw new ArgumentException("Address must be a valid absolute URI.", nameof(address));
         }
 
-        var builder = services.AddGrpcClient<TClient>(o => o.Address = new(address));
+        IHttpClientBuilder builder = services.AddGrpcClient<TClient>(o => o.Address = new(address));
 
         return builder;
     }
@@ -122,7 +122,7 @@ public static class ServiceReferenceExtensions
     /// <param name="failureStatus">The <see cref="HealthStatus"/> that should be reported if the health check fails. Defaults to <see cref="HealthStatus.Unhealthy"/>.</param>
     /// <returns>An <see cref="IHttpClientBuilder"/> that can be used to configure the client.</returns>
     /// <exception cref="ArgumentException">Thrown when <paramref name="address"/> is not a valid URI value.</exception>
-    public static IHttpClientBuilder AddGrpcServiceReference<TClient>(this IServiceCollection services, string address, string? healthCheckName = null, HealthStatus failureStatus = default)
+    public static IHttpClientBuilder AddGrpcServiceReference<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] TClient>(this IServiceCollection services, string address, string? healthCheckName = null, HealthStatus failureStatus = default)
         where TClient : class
     {
         ArgumentNullException.ThrowIfNull(services);
@@ -132,8 +132,8 @@ public static class ServiceReferenceExtensions
             throw new ArgumentException("Address must be a valid absolute URI.", nameof(address));
         }
 
-        var uri = new Uri(address);
-        var builder = services.AddGrpcClient<TClient>(o => o.Address = uri);
+        Uri uri = new(address);
+        IHttpClientBuilder builder = services.AddGrpcClient<TClient>(o => o.Address = uri);
 
         AddGrpcHealthChecks(services, uri, healthCheckName ?? $"{typeof(TClient).Name}-health", failureStatus);
 
@@ -142,8 +142,8 @@ public static class ServiceReferenceExtensions
 
     private static void AddGrpcHealthChecks(IServiceCollection services, Uri uri, string healthCheckName, HealthStatus failureStatus = default)
     {
-        services.AddGrpcClient<Health.HealthClient>(o => o.Address = uri);
-        services.AddHealthChecks()
+        _ = services.AddGrpcClient<Health.HealthClient>(o => o.Address = uri);
+        _ = services.AddHealthChecks()
             .AddCheck<GrpcServiceHealthCheck>(healthCheckName, failureStatus);
     }
 
@@ -151,11 +151,14 @@ public static class ServiceReferenceExtensions
     {
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
-            var response = await healthClient.CheckAsync(new(), cancellationToken: cancellationToken);
+            HealthCheckResponse response = await healthClient.CheckAsync(new(), cancellationToken: cancellationToken);
 
             return response.Status switch
             {
                 HealthCheckResponse.Types.ServingStatus.Serving => HealthCheckResult.Healthy(),
+                HealthCheckResponse.Types.ServingStatus.Unknown => HealthCheckResult.Unhealthy(),
+                HealthCheckResponse.Types.ServingStatus.NotServing => HealthCheckResult.Unhealthy(),
+                HealthCheckResponse.Types.ServingStatus.ServiceUnknown => HealthCheckResult.Unhealthy(),
                 _ => HealthCheckResult.Unhealthy()
             };
         }

@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+﻿using Microsoft.Extensions.Hosting;
 using System.Reflection;
 
 namespace Asprtu.Capacities.Registrar;
@@ -12,10 +11,6 @@ public sealed class DependencyRegistrar(IHostApplicationBuilder builder) : Abstr
 
     public override void AddAsprtus()
     {
-        _ = Builder.Services.AddTcpServerFactory()
-            .AddTcpClientFactory()
-            .AddProtocolManifest();
-
         AddAsprtusCapacityLayer();
         AddApplicationHostedServices();
     }

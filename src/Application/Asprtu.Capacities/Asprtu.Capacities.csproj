@@ -17,9 +17,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\Infrastructures\Asprtu.Core\Asprtu.Core.csproj" />
-		<ProjectReference Include="..\..\Infrastructures\Asprtu.Repository.MemoryCache\Asprtu.Repository.MemoryCache.csproj" />
-		<ProjectReference Include="RTU_Solution\src\RTU\RTU.TcpClient\RTU.TcpClient.csproj" />
-		<ProjectReference Include="RTU_Solution\src\RTU\RTU.TcpServer\RTU.TcpServer.csproj" />
+		<ProjectReference Include="..\..\Infrastructures\Asprtu.Memory\Asprtu.Memory.csproj" />
 	</ItemGroup>
 
 
