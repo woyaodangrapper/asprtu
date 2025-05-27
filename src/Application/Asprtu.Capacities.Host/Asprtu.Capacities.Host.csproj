@@ -9,9 +9,16 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Grpc.AspNetCore" Version="2.71.0" />
+		<PackageReference Include="HotChocolate.AspNetCore" Version="16.0.0-p.2.0" />
 		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0-preview.4.25258.110" />
+		<PackageReference Include="HotChocolate.AspNetCore.Authorization" Version="16.0.0-p.2.0" />
 		<!--<PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="8.1.2" />-->
-		<PackageReference Include="Scalar.AspNetCore" Version="2.3.1" />
+		<PackageReference Include="Scalar.AspNetCore" Version="2.4.3" />
+
+		<PackageReference Include="HotChocolate.Types.Analyzers" Version="16.0.0-p.2.0">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\..\Infrastructures\Asprtu.gRPC\Asprtu.Grpc.csproj" />
@@ -20,6 +27,19 @@
 
 	<ItemGroup>
 		<Protobuf Include="..\..\Infrastructures\Asprtu.Grpc\Protos\Capacities\*.proto" GrpcServices="Capacities" Link="Grpc\Protos\Capacities\%(RecursiveDir)%(Filename)%(Extension)" ProtoRoot="..\..\Infrastructures\Asprtu.Grpc\" />
-		<!--<Protobuf Include="..\..\Infrastructures\Asprtu.Grpc\Protos\Capacities\tcpgrpc.proto" GrpcServices="Capacities" Link="Grpc\Protos\Capacities\tcpgrpc.proto" ProtoRoot="..\..\Infrastructures\Asprtu.Grpc\" />-->
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Remove="appsettings.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="appsettings.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="Endpoints\TcpGraphQL.cs" />
 	</ItemGroup>
 </Project>

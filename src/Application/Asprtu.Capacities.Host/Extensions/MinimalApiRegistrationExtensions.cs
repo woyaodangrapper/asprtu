@@ -34,4 +34,13 @@ public static class MinimalApiRegistrationExtensions
            .WithSingletonLifetime());
         return builder;
     }
+
+    public static TBuilder AddGraphQL<TBuilder>(this TBuilder builder) where TBuilder : IHostApplicationBuilder
+    {
+        _ = builder.Services
+         .AddGraphQLServer()
+         .AddMyGraphQLTypes()
+        .InitializeOnStartup();
+        return builder;
+    }
 }

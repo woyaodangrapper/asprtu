@@ -18,8 +18,13 @@ internal class OnboardingOptions
     public void Validate()
     {
         if (string.IsNullOrWhiteSpace(Address))
+        {
             throw new ArgumentException("Address 不能为空", nameof(Address));
+        }
+
         if (string.IsNullOrWhiteSpace(Protocol))
+        {
             throw new ArgumentException("Protocol 不能为空", nameof(Protocol));
+        }
     }
 }

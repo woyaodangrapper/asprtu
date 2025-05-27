@@ -1,20 +1,32 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using System.Reflection;
 
 namespace Asprtu.Capacities.Host.Extensions;
 
 internal static class ApplicationLaunchSettings
 {
-    internal static TBuilder UseLaunchSettings<TBuilder>(this TBuilder builder, string? resourceName = null)
-       where TBuilder : IHostApplicationBuilder
+    /// <summary>
+    /// 从指定资源路径加载并合并项目的 launchSettings.json 配置到应用配置中。
+    /// </summary>
+    /// <typeparam name="TBuilder">继承自 <see cref="IHostApplicationBuilder"/> 的宿主构建器类型。</typeparam>
+    /// <param name="builder">宿主应用构建器实例。</param>
+    /// <param name="resourceName">
+    /// 可选参数，指定项目资源名称，用于定位 launchSettings.json 文件的父目录。
+    /// 如果为 <c>null</c>，则直接使用项目源路径。
+    /// </param>
+    /// <returns>返回同一构建器实例，支持链式调用。</returns>
+    /// <exception cref="InvalidOperationException">当项目源路径未设置时抛出。</exception>
+    /// <exception cref="FileNotFoundException">
+    /// 当找不到指定路径下的 launchSettings.json 文件时抛出，
+    /// 并包含详细异常信息。
+    /// </exception>
+    internal static TBuilder AddLaunchSettings<TBuilder>(this TBuilder builder, string? resourceName = null)
+        where TBuilder : IHostApplicationBuilder
     {
         string? launchProfilePath = ProjectSourcePath.Value;
-        if (!string.IsNullOrEmpty(builder.Configuration["DOTNET_RUNNING_IN_CONTAINER"]))
-        {
-            return builder;
-        }
 
         if (string.IsNullOrEmpty(launchProfilePath))
         {
@@ -23,17 +35,15 @@ internal static class ApplicationLaunchSettings
 
         string basePath =
            resourceName is null ? launchProfilePath : (Directory.GetParent(launchProfilePath)?.FullName ?? launchProfilePath) + resourceName;
-        string launchSettingsFilePath = Path.Combine(basePath, "Properties", "launchSettings.json");
+        string launchSettingsFilePath = System.IO.Path.Combine(basePath, "Properties", "launchSettings.json");
 
         try
         {
-            // It isn't mandatory that the launchSettings.json file exists!
             if (!File.Exists(launchSettingsFilePath))
             {
                 throw new FileNotFoundException($"The launch settings file '{launchSettingsFilePath}' does not exist.");
             }
 
-            // 1. 读取 launchSettings.json
             IConfigurationRoot launchSettings = new ConfigurationBuilder()
                 .SetBasePath(basePath)
                 .AddJsonFile("Properties/launchSettings.json", optional: false)
@@ -48,34 +58,57 @@ internal static class ApplicationLaunchSettings
         }
     }
 
+    /// <summary>
+    /// 为宿主构建器添加 <c>appsettings.json</c> 和 <c>appsettings.{Environment}.json</c> 配置文件，以及环境变量配置。
+    /// 支持热加载和环境分层配置。
+    /// </summary>
+    /// <typeparam name="TBuilder">继承自 <see cref="IHostApplicationBuilder"/> 的宿主构建器类型。</typeparam>
+    /// <param name="builder">宿主应用构建器实例。</param>
+    /// <returns>返回同一构建器实例，支持链式调用。</returns>
+    internal static TBuilder AddAppsettings<TBuilder>(this TBuilder builder)
+        where TBuilder : IHostApplicationBuilder
+    {
+        _ = builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+             .AddJsonFile(
+             $"appsettings.{builder.Environment.EnvironmentName}.json",
+             optional: true, reloadOnChange: true)
+             .AddEnvironmentVariables();
+
+        return builder;
+    }
+
+    /// <summary>
+    /// 配置 <see cref="IWebHostBuilder"/> 使用 Kestrel 服务器，
+    /// 并根据 <c>DOTNET_LAUNCH_PROFILE</c> 以及配置文件中的 profiles 自动设置监听地址和 HTTPS 支持。
+    /// </summary>
+    /// <typeparam name="TBuilder">继承自 <see cref="IWebHostBuilder"/> 的 Web 主机构建器类型。</typeparam>
+    /// <param name="builder">Web 主机构建器实例。</param>
+    /// <returns>返回同一构建器实例，支持链式调用。</returns>
     internal static TBuilder UseKestrel<TBuilder>(this TBuilder builder)
        where TBuilder : IWebHostBuilder
     {
-        // 通过builder.ConfigureServices获取IServiceCollection
         _ = builder.ConfigureServices((context, services) =>
-         {
-             IConfiguration configuration = context.Configuration;
+        {
+            IConfiguration configuration = context.Configuration;
+            // 该环境变量会在应用程序启动时自动设置，其值为当前选定的启动配置文件（launch profile）的名称。
+            // 但实际为空，如果官方修复了，会先使用该环境变量的值。（如果通过 Aspire 启动则有值）
+            string profile = Environment.GetEnvironmentVariable("DOTNET_LAUNCH_PROFILE")
+                ?? configuration["DOTNET_LAUNCH_PROFILE"] ?? "default";
 
-             // 该环境变量会在应用程序启动时自动设置，其值为当前选定的启动配置文件（launch profile）的名称。
-             // 但实际为空，如果官方修复了，会先使用该环境变量的值。（如果通过 Aspire 启动则有值）
-             string profile = Environment.GetEnvironmentVariable("DOTNET_LAUNCH_PROFILE")
-                 ?? configuration["DOTNET_LAUNCH_PROFILE"] ?? "default";
+            string? httpUrl = configuration["profiles:http:applicationUrl"];
+            string? httpsUrl = configuration["profiles:https:applicationUrl"];
+            string? profileUrl = configuration[$"profiles:{profile}:applicationUrl"];
 
-             string? httpUrl = configuration["profiles:http:applicationUrl"];
-             string? httpsUrl = configuration["profiles:https:applicationUrl"];
-             string? profileUrl = configuration[$"profiles:{profile}:applicationUrl"];
+            string urls = profileUrl ?? ((httpsUrl ?? httpUrl) ?? configuration["urls"])
+                       ?? "http://localhost:5000"; // 默认地址
 
-             string urls = profileUrl ?? ((httpsUrl ?? httpUrl) ?? configuration["urls"])
-                        ?? "http://localhost:5000"; // 默认地址
+            _ = builder.UseUrls(urls);
 
-             _ = builder.UseUrls(urls);
-
-             if (urls.Contains("https://", StringComparison.OrdinalIgnoreCase))
-             {
-                 _ = builder.UseKestrelHttpsConfiguration(); // 自动启用 https
-             }
-         });
-
+            if (urls.Contains("https://", StringComparison.OrdinalIgnoreCase))
+            {
+                _ = builder.UseKestrelHttpsConfiguration(); // 自动启用 https
+            }
+        }).ConfigureKestrel((context, options) => options.Configure(context.Configuration.GetSection("Kestrel")));
         return builder;
     }
 

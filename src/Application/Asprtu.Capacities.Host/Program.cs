@@ -13,11 +13,15 @@ WebApplicationBuilder builder = WebApplication.CreateSlimBuilder(args);
 
 builder.Services.Configure<RouteOptions>(options => options.SetParameterPolicy<RegexInlineRouteConstraint>("regex"));
 
+builder.AddAppsettings();
+
 // Add service defaults & Aspire client integrations.
 builder.AddHostDefaults()
     .AddSwagger()
     .AddAsprtu();
-builder.AddEndpoints();
+
+builder.AddEndpoints()
+    .AddGraphQL();
 
 bool inAspire =
     !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER")?.ToLower());
@@ -25,9 +29,9 @@ bool inAspire =
 // —— 只有在 dev&cli 环境时才去加载 launchSettings.json ——
 if (!inAspire || (builder.Environment.IsDevelopment() && Debugger.IsAttached))
 {
-    _ = builder.UseLaunchSettings();
-    _ = builder.WebHost.UseKestrel();
+    _ = builder.AddLaunchSettings();
 }
+builder.WebHost.UseKestrel();
 
 WebApplication app = builder.Build();
 
@@ -50,5 +54,7 @@ app.MapDefaultEndpoints();
 app.UseExceptionHandler();
 
 app.MapEndpoints();
+
+app.MapGraphQL();
 
 app.Run();

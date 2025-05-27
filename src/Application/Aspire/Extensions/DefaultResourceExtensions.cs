@@ -28,9 +28,11 @@ namespace Aspire.Extensions
             this IResourceBuilder<TDestination> builder,
             DefaultResource resource) where TDestination : IResourceWithEnvironment
         {
-            if (!resource.ServiceUri.IsAbsoluteUri) throw new InvalidOperationException();
-            if (resource.ServiceUri.AbsolutePath != "/") throw new InvalidOperationException();
-            return builder.WithReference(resource.Name, resource.ServiceUri);
+            return !resource.ServiceUri.IsAbsoluteUri
+                ? throw new InvalidOperationException()
+                : resource.ServiceUri.AbsolutePath != "/"
+                ? throw new InvalidOperationException()
+                : builder.WithReference(resource.Name, resource.ServiceUri);
         }
     }
 }
