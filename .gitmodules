@@ -1,0 +1,3 @@
+[submodule "src/Infrastructures/SubDomain/RTU_Solution"]
+	path = src/Infrastructures/SubDomain/RTU_Solution
+	url = https://github.com/woyaodangrapper/RTU_Solution.git
