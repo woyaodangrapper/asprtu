@@ -5,7 +5,7 @@ using Microsoft.Extensions.Hosting;
 
 namespace Asprtu.Capacities.Host.Extensions;
 
-public static class EndpointExtensions
+public static class MinimalApiRegistrationExtensions
 {
     /// <summary>
     /// 注册所有 IEndpoint 实现类，并调用其 RegisterEndpoints 方法以生成基础 HTTP/1.1 端点，

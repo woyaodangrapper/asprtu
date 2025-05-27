@@ -27,8 +27,7 @@ public static class HostExtension
 
         builder.AddDefaultHealthChecks();
 
-        builder.Services.AddGrpc()
-            .AddJsonTranscoding();
+        builder.Services.AddGrpc();
 
         builder.Services.AddGrpcHealthChecks();
 

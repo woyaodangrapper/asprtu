@@ -3,19 +3,19 @@ using Asprtu.Capacities.Host.Endpoints;
 using Asprtu.Capacities.Host.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.Routing.Constraints;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Diagnostics;
 
 WebApplicationBuilder builder = WebApplication.CreateSlimBuilder(args);
 
-//builder.Services.ConfigureHttpJsonOptions(options =>
-//{
-//    options.SerializerOptions.TypeInfoResolverChain.Insert(0, AppJsonSerializerContext.Default);
-//});
+builder.Services.Configure<RouteOptions>(options => options.SetParameterPolicy<RegexInlineRouteConstraint>("regex"));
 
 // Add service defaults & Aspire client integrations.
 builder.AddHostDefaults()
-    .AddApiDocumentation()
+    .AddSwagger()
     .AddAsprtu();
 builder.AddEndpoints();
 
@@ -33,7 +33,7 @@ WebApplication app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    _ = app.UseApiDocumentation();
+    _ = app.UseSwaggerUI();
 }
 
 app.MapGet("/", () =>

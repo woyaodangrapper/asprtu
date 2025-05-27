@@ -3,7 +3,7 @@ using Microsoft.Extensions.Hosting;
 
 namespace Asprtu.Capacities.Host.Extensions;
 
-public static class ExceptionHandlerExtensions
+public static class ExceptionHandlingExtensions
 {
     /// <summary>
     /// 启用 异常处理程序和状态码页面。

@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace Asprtu.Capacities.Host.Extensions;
 
-internal static class LaunchSettings
+internal static class ApplicationLaunchSettings
 {
     internal static TBuilder UseLaunchSettings<TBuilder>(this TBuilder builder, string? resourceName = null)
        where TBuilder : IHostApplicationBuilder
@@ -69,6 +69,11 @@ internal static class LaunchSettings
                         ?? "http://localhost:5000"; // 默认地址
 
              _ = builder.UseUrls(urls);
+
+             if (urls.Contains("https://", StringComparison.OrdinalIgnoreCase))
+             {
+                 _ = builder.UseKestrelHttpsConfiguration(); // 自动启用 https
+             }
          });
 
         return builder;
