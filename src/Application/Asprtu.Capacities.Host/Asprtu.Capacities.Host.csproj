@@ -30,16 +30,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Remove="appsettings.json" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<Content Include="appsettings.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
 	</ItemGroup>
 
-	<ItemGroup>
-		<None Include="Endpoints\TcpGraphQL.cs" />
-	</ItemGroup>
 </Project>

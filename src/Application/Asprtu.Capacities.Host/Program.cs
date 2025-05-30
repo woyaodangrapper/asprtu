@@ -32,7 +32,6 @@ if (!inAspire || (builder.Environment.IsDevelopment() && Debugger.IsAttached))
     _ = builder.AddLaunchSettings();
 }
 builder.WebHost.UseKestrel();
-
 WebApplication app = builder.Build();
 
 if (app.Environment.IsDevelopment())
