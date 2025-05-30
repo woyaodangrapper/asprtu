@@ -14,6 +14,7 @@ WebApplicationBuilder builder = WebApplication.CreateSlimBuilder(args);
 builder.Services.Configure<RouteOptions>(options => options.SetParameterPolicy<RegexInlineRouteConstraint>("regex"));
 
 builder.AddAppsettings();
+builder.AddLibraryList();
 
 // Add service defaults & Aspire client integrations.
 builder.AddHostDefaults()

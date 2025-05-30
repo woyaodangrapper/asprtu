@@ -13,6 +13,7 @@
 		<PackageReference Include="DotNetCore.CAP" Version="8.3.5" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.0-preview.4.25258.110" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.0-preview.4.25258.110" />
+		<PackageReference Include="Microsoft.Orleans.Core.Abstractions" Version="9.2.0-preview1" />
 	</ItemGroup>
 
 	<ItemGroup>
