@@ -1,6 +1,6 @@
 using Microsoft.CodeAnalysis;
 
-namespace resource_analyzers.Filters;
+namespace Asprtu.Gens.Filters;
 
 public interface ISyntaxFilter
 {

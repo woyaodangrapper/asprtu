@@ -37,6 +37,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Asprtu.Rtu.TcpClient", "src
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Asprtu.Rtu.TcpServer", "src\Infrastructures\SubDomain\RTU_Solution\src\Asprtu.Rtu.TcpServer\Asprtu.Rtu.TcpServer.csproj", "{AF9B0BF1-F2AB-F754-CF13-5AEC95C5AD16}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Asprtu.Gens", "src\Infrastructures\Asprtu.Gens\Asprtu.Gens.csproj", "{C4A5F67F-6B9F-2138-09AE-E170E7421D74}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -79,6 +81,10 @@ Global
 		{AF9B0BF1-F2AB-F754-CF13-5AEC95C5AD16}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF9B0BF1-F2AB-F754-CF13-5AEC95C5AD16}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AF9B0BF1-F2AB-F754-CF13-5AEC95C5AD16}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4A5F67F-6B9F-2138-09AE-E170E7421D74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4A5F67F-6B9F-2138-09AE-E170E7421D74}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4A5F67F-6B9F-2138-09AE-E170E7421D74}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4A5F67F-6B9F-2138-09AE-E170E7421D74}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -96,10 +102,11 @@ Global
 		{A5896252-F079-9B32-24C0-883507B41D2D} = {8A6D4252-C2D0-2E03-551C-FD36EE5C0B56}
 		{2128501D-5B7E-AF7C-9E24-0D8763345B49} = {8A6D4252-C2D0-2E03-551C-FD36EE5C0B56}
 		{AF9B0BF1-F2AB-F754-CF13-5AEC95C5AD16} = {8A6D4252-C2D0-2E03-551C-FD36EE5C0B56}
+		{C4A5F67F-6B9F-2138-09AE-E170E7421D74} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {199B1B96-4F56-4828-9531-813BA02DB282}
-		RESX_NeutralResourcesLanguage = zh-Hans
 		RESX_Rules = {"EnabledRules":[]}
+		RESX_NeutralResourcesLanguage = zh-Hans
 	EndGlobalSection
 EndGlobal

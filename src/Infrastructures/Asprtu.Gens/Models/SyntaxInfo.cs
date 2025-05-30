@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Immutable;
 
-namespace resource_analyzers.Models;
+namespace Asprtu.Gens.Models;
 
 public abstract class SyntaxInfo : IEquatable<SyntaxInfo>
 {

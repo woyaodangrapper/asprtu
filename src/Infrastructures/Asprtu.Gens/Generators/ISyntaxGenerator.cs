@@ -1,10 +1,10 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
-using resource_analyzers.Models;
+using Asprtu.Gens.Models;
 using System;
 using System.Collections.Immutable;
 
-namespace resource_analyzers.Generators;
+namespace Asprtu.Gens.Generators;
 
 public interface ISyntaxGenerator
 {

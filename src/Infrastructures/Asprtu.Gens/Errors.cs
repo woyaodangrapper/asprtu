@@ -1,6 +1,6 @@
 using Microsoft.CodeAnalysis;
 
-namespace resource_analyzers;
+namespace Asprtu.Gens;
 
 public static class Errors
 {

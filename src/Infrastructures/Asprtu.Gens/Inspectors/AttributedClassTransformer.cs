@@ -1,10 +1,10 @@
-﻿using Microsoft.CodeAnalysis;
-using resource_analyzers.Models;
+﻿using Asprtu.Gens.Models;
+using Microsoft.CodeAnalysis;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 
-namespace resource_analyzers.Inspectors;
+namespace Asprtu.Gens.Inspectors;
 
 public class AttributedCrossClassTransformer(string attributeFullName) : IPostCollectSyntaxTransformer
 {
@@ -14,8 +14,8 @@ public class AttributedCrossClassTransformer(string attributeFullName) : IPostCo
         Compilation compilation,
         ImmutableArray<SyntaxInfo> syntaxInfos)
     {
-        var result = syntaxInfos.ToBuilder();
-        var addedKeys = new HashSet<string>(syntaxInfos.Select(si => si.OrderByKey));
+        var result = ImmutableArray.CreateBuilder<SyntaxInfo>();
+
         var attributeSymbol = compilation.GetTypeByMetadataName(_attributeFullName);
         if (attributeSymbol == null)
             return result.ToImmutable();
@@ -23,9 +23,12 @@ public class AttributedCrossClassTransformer(string attributeFullName) : IPostCo
         var assembliesToSearch = new List<IAssemblySymbol> { compilation.Assembly };
         assembliesToSearch.AddRange(compilation.SourceModule.ReferencedAssemblySymbols);
 
-        foreach (IAssemblySymbol assembly in assembliesToSearch.Distinct(SymbolEqualityComparer.Default).Cast<IAssemblySymbol>())
+        var addedKeys = new HashSet<string>();
+        foreach (var assembly in assembliesToSearch
+                    .Distinct(SymbolEqualityComparer.Default)
+                    .Cast<IAssemblySymbol>())
         {
-            SearchNamespace(assembly.GlobalNamespace, attributeSymbol, result, addedKeys);
+            SearchNamespace(assembly.GlobalNamespace, attributeSymbol, result, ref addedKeys);
         }
 
         return result.ToImmutable();
@@ -35,7 +38,7 @@ public class AttributedCrossClassTransformer(string attributeFullName) : IPostCo
         INamespaceSymbol namespaceSymbol,
         INamedTypeSymbol attributeSymbol,
         ImmutableArray<SyntaxInfo>.Builder result,
-        HashSet<string> addedKeys)
+        ref HashSet<string> addedKeys)
     {
         foreach (var type in namespaceSymbol.GetTypeMembers())
         {
@@ -57,7 +60,7 @@ public class AttributedCrossClassTransformer(string attributeFullName) : IPostCo
 
         foreach (var subNs in namespaceSymbol.GetNamespaceMembers())
         {
-            SearchNamespace(subNs, attributeSymbol, result, addedKeys);
+            SearchNamespace(subNs, attributeSymbol, result, ref addedKeys);
         }
     }
 }

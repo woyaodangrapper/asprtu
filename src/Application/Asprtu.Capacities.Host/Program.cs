@@ -23,11 +23,10 @@ builder.AddHostDefaults()
 builder.AddEndpoints()
     .AddGraphQL();
 
-bool inAspire =
-    !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER")?.ToLower());
+bool inAspire = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER")?.ToLower());
 
 // —— 只有在 dev&cli 环境时才去加载 launchSettings.json ——
-if (!inAspire || (builder.Environment.IsDevelopment() && Debugger.IsAttached))
+if (!inAspire && Debugger.IsAttached)
 {
     _ = builder.AddLaunchSettings();
 }

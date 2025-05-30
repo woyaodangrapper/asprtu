@@ -1,4 +1,4 @@
-namespace resource_analyzers.Models;
+namespace Asprtu.Gens.Models;
 
 public sealed class LibraryInfo : SyntaxInfo
 {

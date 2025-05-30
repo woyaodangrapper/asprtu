@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 
-namespace resource_analyzers.Helpers;
+namespace Asprtu.Gens.Helpers;
 
 public static class PooledObjects
 {

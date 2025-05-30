@@ -1,18 +1,18 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using Asprtu.Gens.Filters;
+using Asprtu.Gens.Generators;
+using Asprtu.Gens.Helpers;
+using Asprtu.Gens.Inspectors;
+using Asprtu.Gens.Models;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
-using resource_analyzers.Filters;
-using resource_analyzers.Generators;
-using resource_analyzers.Helpers;
-using resource_analyzers.Inspectors;
-using resource_analyzers.Models;
 using System;
 using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 
-namespace resource_analyzers;
+namespace Asprtu.Gens;
 
 #pragma warning disable RS1041 // 无所谓
 

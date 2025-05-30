@@ -1,11 +1,11 @@
+using Asprtu.Gens.Builders;
+using Asprtu.Gens.Models;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
-using resource_analyzers.Builders;
-using resource_analyzers.Models;
 using System;
 using System.Collections.Immutable;
 
-namespace resource_analyzers.Generators;
+namespace Asprtu.Gens.Generators;
 
 public sealed class LibraryLoaderSyntaxGenerator : ISyntaxGenerator
 {
@@ -42,7 +42,6 @@ public sealed class LibraryLoaderSyntaxGenerator : ISyntaxGenerator
         generator.WriteEndRegistrationMethod();
         generator.WriteEndClass();
         generator.WriteEndNamespace();
-        //System.Diagnostics.Debugger.Launch();
 
         addSource("LibraryExtensionsLoaderModule.Hash.g.cs", generator.ToSourceText());
     }

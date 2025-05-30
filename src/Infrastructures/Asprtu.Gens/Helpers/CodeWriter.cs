@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Text;
 
-namespace resource_analyzers.Helpers;
+namespace Asprtu.Gens.Helpers;
 
 public class CodeWriter : TextWriter
 {

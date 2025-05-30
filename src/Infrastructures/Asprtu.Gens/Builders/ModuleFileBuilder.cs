@@ -1,9 +1,9 @@
 using Microsoft.CodeAnalysis.Text;
-using resource_analyzers.Helpers;
+using Asprtu.Gens.Helpers;
 using System;
 using System.Text;
 
-namespace resource_analyzers.Builders;
+namespace Asprtu.Gens.Builders;
 
 public sealed class ModuleFileBuilder : IDisposable
 {
@@ -56,7 +56,7 @@ public sealed class ModuleFileBuilder : IDisposable
 
     public void WriteRegisterEnumerableLoaderGroup(string interfaceTypeName)
         => _writer.WriteIndentedLine(
-            "builder.Services.TryAddEnumerable(ServiceDescriptor.Singleton(typeof(ILibraryCapacities), typeof(LibraryCapacities<>).MakeGenericType(typeof(global::{0}))));",
+            "builder.Services.TryAddEnumerable(ServiceDescriptor.Singleton(typeof(Asprtu.Rtu.Contracts.ILibraryCapacities), typeof(Asprtu.Rtu.LibraryCapacities<>).MakeGenericType(typeof(global::{0}))));",
             interfaceTypeName);
 
     public void WriteBeginRegistrationMethod()

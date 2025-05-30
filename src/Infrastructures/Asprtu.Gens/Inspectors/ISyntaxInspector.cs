@@ -1,11 +1,11 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using resource_analyzers.Filters;
-using resource_analyzers.Models;
+using Asprtu.Gens.Filters;
+using Asprtu.Gens.Models;
 using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 
-namespace resource_analyzers.Inspectors;
+namespace Asprtu.Gens.Inspectors;
 
 /// <summary>
 /// The syntax inspector will analyze a syntax node and try to reason out the semantics in a

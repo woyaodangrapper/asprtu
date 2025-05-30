@@ -1,6 +1,6 @@
 using System;
 
-namespace resource_analyzers.Helpers;
+namespace Asprtu.Gens.Helpers;
 
 public static class CodeWriterExtensions
 {

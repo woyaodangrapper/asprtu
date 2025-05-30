@@ -1,6 +1,6 @@
 using System;
 
-namespace resource_analyzers.Models;
+namespace Asprtu.Gens.Models;
 
 public sealed class TypeInfo(string name) : SyntaxInfo
 {

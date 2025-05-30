@@ -2,7 +2,7 @@ using Microsoft.CodeAnalysis;
 using System;
 using System.Collections.Generic;
 
-namespace resource_analyzers.Filters;
+namespace Asprtu.Gens.Filters;
 
 public sealed class SyntaxFilterBuilder
 {

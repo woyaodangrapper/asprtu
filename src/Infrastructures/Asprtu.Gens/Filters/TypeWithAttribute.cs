@@ -1,7 +1,7 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace resource_analyzers.Filters;
+namespace Asprtu.Gens.Filters;
 
 public sealed class TypeWithAttribute : ISyntaxFilter
 {

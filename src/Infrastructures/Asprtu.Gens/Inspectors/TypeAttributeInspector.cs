@@ -1,13 +1,13 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using resource_analyzers.Filters;
-using resource_analyzers.Models;
+using Asprtu.Gens.Filters;
+using Asprtu.Gens.Models;
 using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
-namespace resource_analyzers.Inspectors
+namespace Asprtu.Gens.Inspectors
 {
     public sealed class LibraryAttributeInspector : ISyntaxInspector
     {
