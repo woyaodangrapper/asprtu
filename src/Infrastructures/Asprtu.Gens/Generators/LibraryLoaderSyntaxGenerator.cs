@@ -30,12 +30,19 @@ public sealed class LibraryLoaderSyntaxGenerator : ISyntaxGenerator
         generator.WriteBeginClass();
         generator.WriteBeginRegistrationMethod();
 
+        //foreach (var syntaxInfo in syntaxInfos)
+        //{
+        //    if (syntaxInfo is not LibraryInfo library)
+        //    { continue; }
+
+        //    generator.WriteRegisterSingletonLoaderGroup(library.TypeName, library.InterfaceName);
+        //}
+
         foreach (var syntaxInfo in syntaxInfos)
         {
             if (syntaxInfo is not LibraryInfo library)
-            {
-                continue;
-            }
+            { continue; }
+
             generator.WriteRegisterEnumerableLoaderGroup(library.InterfaceName);
         }
 

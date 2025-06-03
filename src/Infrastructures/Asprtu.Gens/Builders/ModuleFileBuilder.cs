@@ -1,5 +1,5 @@
-using Microsoft.CodeAnalysis.Text;
 using Asprtu.Gens.Helpers;
+using Microsoft.CodeAnalysis.Text;
 using System;
 using System.Text;
 
@@ -58,6 +58,11 @@ public sealed class ModuleFileBuilder : IDisposable
         => _writer.WriteIndentedLine(
             "builder.Services.TryAddEnumerable(ServiceDescriptor.Singleton(typeof(Asprtu.Rtu.Contracts.ILibraryCapacities), typeof(Asprtu.Rtu.LibraryCapacities<>).MakeGenericType(typeof(global::{0}))));",
             interfaceTypeName);
+
+    public void WriteRegisterSingletonLoaderGroup(string interfaceTypeName, string implementationTypeName)
+    => _writer.WriteIndentedLine(
+        "builder.Services.TryAddSingleton(typeof(global::{0}), typeof(global::{1}));",
+        interfaceTypeName, implementationTypeName);
 
     public void WriteBeginRegistrationMethod()
     {

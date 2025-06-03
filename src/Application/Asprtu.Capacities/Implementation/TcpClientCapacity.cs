@@ -1,10 +1,21 @@
 ﻿using Asprtu.Capacities.Contracts;
 using Asprtu.Core.Attributes;
+using Asprtu.Rtu.Contracts;
 
 namespace Asprtu.Capacities.Implementation;
 
 [Asprtus]
 public class TcpClientCapacity : AbstractCapacity, ITcpClient
 {
+    protected readonly IEnumerable<ILibraryCapacities> _capacities;
+
+    public TcpClientCapacity(
+        IEnumerable<ILibraryCapacities> capacities
+        )
+    {
+        _capacities = capacities
+            ?? throw new ArgumentNullException(nameof(capacities));
+    }
+
     public Task PistonAsync(CancellationToken stoppingToken) => throw new NotImplementedException();
 }

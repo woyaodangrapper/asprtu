@@ -14,10 +14,11 @@ public static class MinimalApiRegistrationExtensions
     public static void MapEndpoints(this WebApplication app)
     {
         // 从服务容器中获取所有 IEndpoint
-        IEnumerable<IEndpoint> definitions = app.Services.GetServices<IEndpoint>();
+        using IServiceScope scope = app.Services.CreateScope();
+        IEnumerable<IEndpoint> definitions = scope.ServiceProvider.GetServices<IEndpoint>();
         foreach (IEndpoint def in definitions)
         {
-            def.RegisterEndpoints(app);
+            def.AddEndpoints(app);
         }
     }
 
@@ -31,7 +32,7 @@ public static class MinimalApiRegistrationExtensions
            .FromAssemblyOf<Program>()
            .AddClasses(classes => classes.AssignableTo<IEndpoint>())
            .AsImplementedInterfaces()
-           .WithSingletonLifetime());
+           .WithScopedLifetime());
         return builder;
     }
 

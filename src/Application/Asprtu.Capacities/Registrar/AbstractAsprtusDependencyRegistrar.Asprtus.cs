@@ -23,9 +23,17 @@ public partial class AbstractAsprtusDependencyRegistrar
 
         foreach (Type type in exportedTypes)
         {
-            if (type.IsClass && !type.IsAbstract && type.GetCustomAttribute<AsprtusAttribute>() != null)
+            if (!type.IsClass || type.IsAbstract || type.GetCustomAttribute<AsprtusAttribute>() is null)
             {
-                _ = Builder.Services.AddScoped(type);
+                continue;
+            }
+
+            IEnumerable<Type> interfaces = type.GetInterfaces()
+            .Where(i => i.Assembly == ApplicationLayerAssembly);
+
+            foreach (Type serviceType in interfaces)
+            {
+                _ = Builder.Services.AddScoped(serviceType, type);
             }
         }
     }
