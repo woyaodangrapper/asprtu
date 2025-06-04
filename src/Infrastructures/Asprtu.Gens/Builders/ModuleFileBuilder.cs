@@ -59,10 +59,20 @@ public sealed class ModuleFileBuilder : IDisposable
             "builder.Services.TryAddEnumerable(ServiceDescriptor.Singleton(typeof(Asprtu.Rtu.Contracts.ILibraryCapacities), typeof(Asprtu.Rtu.LibraryCapacities<>).MakeGenericType(typeof(global::{0}))));",
             interfaceTypeName);
 
-    public void WriteRegisterSingletonLoaderGroup(string interfaceTypeName, string implementationTypeName)
-    => _writer.WriteIndentedLine(
-        "builder.Services.TryAddSingleton(typeof(global::{0}), typeof(global::{1}));",
-        interfaceTypeName, implementationTypeName);
+    public void WriteRegisterFactoryLoaderGroup(string subNamespace, string typeName)
+    {
+        _writer.WriteIndentedLine(
+            "builder.Services.AddSingleton(" +
+            "typeof(global::Asprtu.Rtu.{0}.ILibraryFactory<{1}>), " +
+            "typeof(global::Asprtu.Rtu.{0}.{2}));",
+            subNamespace, typeName, typeName);
+
+        _writer.WriteIndentedLine(
+            "builder.Services.AddSingleton(" +
+            "typeof(global::Asprtu.Rtu.{0}.ILibraryCapacitiesFactory<{1}>), " +
+            "typeof(global::Asprtu.Rtu.{0}.LibraryCapacitiesFactory<{1}>));",
+            subNamespace, typeName, typeName);
+    }
 
     public void WriteBeginRegistrationMethod()
     {

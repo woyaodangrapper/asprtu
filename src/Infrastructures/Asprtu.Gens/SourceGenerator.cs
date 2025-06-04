@@ -23,6 +23,8 @@ public class SourceGenerator : IIncrementalGenerator
 
     static SourceGenerator()
     {
+        //System.Diagnostics.Debugger.Launch();
+
         var inspectorLookup = new Dictionary<SyntaxKind, List<ISyntaxInspector>>();
         var filterBuilder = new SyntaxFilterBuilder();
         foreach (var inspector in _allInspectors)
@@ -71,7 +73,8 @@ public class SourceGenerator : IIncrementalGenerator
 
     // 所有的代码生成器，用来最后生成代码
     private static readonly ISyntaxGenerator[] _generators = [
-          new LibraryLoaderSyntaxGenerator()
+          new LibraryLoaderSyntaxGenerator(),
+          //new LibraryFactoriesLoaderSyntaxGenerator()
     ];
 
     // 收集完语法信息后用的后处理器，比如跨项目找特性的类
@@ -82,6 +85,7 @@ public class SourceGenerator : IIncrementalGenerator
     // 所有的语法检查器，比如用来找加了某个特性的类
     private static readonly ISyntaxInspector[] _allInspectors = [
         new LibraryAttributeInspector(),
+        //new LibraryFactoriesInspector(),
     ];
 
     private static void Execute(

@@ -7,10 +7,10 @@
 		<EnableRequestDelegateGenerator>true</EnableRequestDelegateGenerator>
 		<InterceptorsNamespaces>$(InterceptorsNamespaces);Microsoft.AspNetCore.Http.Generated</InterceptorsNamespaces>
 	</PropertyGroup>
+
 	<ItemGroup>
 		<PackageReference Include="Grpc.AspNetCore" Version="2.71.0" />
 		<PackageReference Include="HotChocolate.AspNetCore" Version="16.0.0-p.3.0" />
-		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0-preview.4.25258.110" />
 		<PackageReference Include="HotChocolate.AspNetCore.Authorization" Version="16.0.0-p.3.0" />
 		<!--<PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="8.1.2" />-->
 		<PackageReference Include="Scalar.AspNetCore" Version="2.4.7" />
@@ -20,6 +20,15 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'net9.0'">
+		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.5" />
+	</ItemGroup>
+
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
+		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0-preview.4.25258.110" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\..\Infrastructures\Asprtu.gRPC\Asprtu.Grpc.csproj" />
@@ -36,4 +45,5 @@
 		</Content>
 	</ItemGroup>
 
+	
 </Project>

@@ -59,7 +59,7 @@ internal static class NotifySuperiors
 
                 if (afterResourcesCreatedCallback is not null)
                 {
-                    await afterResourcesCreatedCallback.Invoke(@event.Services, cancellationToken);
+                    await afterResourcesCreatedCallback.Invoke(@event.Services, cancellationToken).ConfigureAwait(false);
                 }
             });
     }

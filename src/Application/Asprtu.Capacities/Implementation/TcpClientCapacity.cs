@@ -15,6 +15,14 @@ public class TcpClientCapacity : AbstractCapacity, ITcpClient
     {
         _capacities = capacities
             ?? throw new ArgumentNullException(nameof(capacities));
+
+        foreach (var capacity in _capacities)
+        {
+            if (capacity.Name == "TcpClient" && capacity.Contracts is Rtu.TcpClient.Contracts.ITcpClient tcpClient)
+            {
+                // Additional logic can be added here if needed
+            }
+        }
     }
 
     public Task PistonAsync(CancellationToken stoppingToken) => throw new NotImplementedException();

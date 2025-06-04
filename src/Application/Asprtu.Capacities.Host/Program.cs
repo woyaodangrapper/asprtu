@@ -15,7 +15,6 @@ builder.Services.Configure<RouteOptions>(options => options.SetParameterPolicy<R
 
 builder.AddAppsettings();
 builder.AddLibraryList();
-
 // Add service defaults & Aspire client integrations.
 builder.AddHostDefaults()
     .AddSwagger()

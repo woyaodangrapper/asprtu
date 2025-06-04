@@ -1,9 +1,6 @@
 ﻿<Project>
 	<Import Project="version.props" />
 	<PropertyGroup>
-		<!-- 设置目标框架为 .NET 10.0 -->
-		<TargetFramework>net10.0</TargetFramework>
-
 		<!-- 启用最新的 C# 语言功能 -->
 		<LangVersion>preview</LangVersion>
 
@@ -65,5 +62,30 @@
 
 		<!-- 允许重复的发布输出文件 -->
 		<ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<SdkVersionClean>$([System.Text.RegularExpressions.Regex]::Match('$(NETCoreSdkVersion)', '^\d+\.\d+\.\d+').Value)</SdkVersionClean>
+		<Net10IsAvailable Condition="
+			'$(NETCoreSdkVersion)' != ''
+			and
+			$([System.Version]::Parse('$(SdkVersionClean)').CompareTo($([System.Version]::Parse('10.0.0.0')))) &gt;= 0
+		  ">true</Net10IsAvailable>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Net10IsAvailable)' == 'true'">
+		<TargetFrameworks>net10.0;net9.0</TargetFrameworks>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Net10IsAvailable)' != 'true'">
+		<TargetFramework>net9.0</TargetFramework>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(TargetFramework)' == 'net9.0'">
+		<DefineConstants>NET9_0</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(TargetFramework)' == 'net10.0'">
+		<DefineConstants>NET10_0</DefineConstants>
 	</PropertyGroup>
 </Project>

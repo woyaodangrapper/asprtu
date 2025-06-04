@@ -3,12 +3,6 @@
 	<Import Project="..\..\..\build\common.props" />
 
 	<ItemGroup>
-		<Compile Remove="RTU_Solution\**" />
-		<EmbeddedResource Remove="RTU_Solution\**" />
-		<None Remove="RTU_Solution\**" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<PackageReference Include="Castle.Core" Version="5.2.1" />
 		<PackageReference Include="DotNetCore.CAP" Version="8.3.5" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.0-preview.4.25258.110" />
@@ -22,12 +16,16 @@
 		<ProjectReference Include="..\..\Infrastructures\SubDomain\RTU_Solution\src\Asprtu.Rtu.TcpClient\Asprtu.Rtu.TcpClient.csproj" />
 		<ProjectReference Include="..\..\Infrastructures\SubDomain\RTU_Solution\src\Asprtu.Rtu.TcpServer\Asprtu.Rtu.TcpServer.csproj" />
 	</ItemGroup>
-
 	<ItemGroup>
-		<ProjectReference Include="..\..\Infrastructures\Asprtu.Gens\Asprtu.Gens.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false">
+		<ProjectReference Include="..\..\Infrastructures\Asprtu.Gens\Asprtu.Gens.csproj"
+                    OutputItemType="Analyzer"
+                    ReferenceOutputAssembly="false">
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 			<PrivateAssets>all</PrivateAssets>
+
+			<!--预览版VS2022 可以不写以下两行-->
+			<ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+			<OutputItemType>Analyzer</OutputItemType>
 		</ProjectReference>
 	</ItemGroup>
-
 </Project>

@@ -15,9 +15,10 @@ public static class DocsConfigurationExtensions
     public static TBuilder AddSwagger<TBuilder>(this TBuilder builder) where TBuilder : IHostApplicationBuilder
     {
         _ = builder.Services.AddOpenApi()
-           //.AddGrpcSwagger()
-           //.AddSwaggerGen()
-           .AddEndpointsApiExplorer();
+       .AddEndpointsApiExplorer();
+        //.AddGrpcSwagger()
+        //.AddSwaggerGen()
+
         return builder;
     }
 
@@ -28,7 +29,7 @@ public static class DocsConfigurationExtensions
     public static WebApplication UseSwaggerUI(this WebApplication app)
     {
         _ = app.MapOpenApi()
-            .CacheOutput();
+          .CacheOutput();
         _ = app.MapScalarApiReference(endpointPrefix: "docs");
         //_ = app.UseSwagger()
         //    .UseSwaggerUI(c =>

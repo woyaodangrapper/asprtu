@@ -7,7 +7,7 @@ using System.Collections.Immutable;
 
 namespace Asprtu.Gens.Generators;
 
-public sealed class LibraryLoaderSyntaxGenerator : ISyntaxGenerator
+public sealed class LibraryFactoriesLoaderSyntaxGenerator : ISyntaxGenerator
 {
     public void Generate(
         SourceProductionContext context,
@@ -19,7 +19,7 @@ public sealed class LibraryLoaderSyntaxGenerator : ISyntaxGenerator
         {
             return;
         }
-        using var generator = new ModuleFileBuilder("LibraryList", "Microsoft.Extensions.DependencyInjection");
+        using var generator = new ModuleFileBuilder("LibraryFactory", "Microsoft.Extensions.DependencyInjection");
         generator.WriteHeader((write) =>
         {
             write.WriteIndentedLine("using Microsoft.Extensions.Hosting;");
@@ -32,10 +32,10 @@ public sealed class LibraryLoaderSyntaxGenerator : ISyntaxGenerator
 
         foreach (var syntaxInfo in syntaxInfos)
         {
-            if (syntaxInfo is not LibraryInfo library)
+            if (syntaxInfo is not FactoryInfo library)
             { continue; }
 
-            generator.WriteRegisterEnumerableLoaderGroup(library.InterfaceName);
+            generator.WriteRegisterFactoryLoaderGroup(library.TypeName, library.InterfaceName);
         }
 
         generator.WriteEndRegistrationMethod();
