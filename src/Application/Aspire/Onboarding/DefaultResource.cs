@@ -13,7 +13,7 @@ internal class DefaultResource : Resource, IResourceWithConnectionString
     public ReferenceExpression ConnectionStringExpression { get; }
 
     internal DefaultResource(OnboardingOptions options)
-          : base("defaultService")
+          : base(options.Name)
     {
         _options = options;
         Protocol = _options.Protocol;

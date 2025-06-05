@@ -2,17 +2,19 @@
 
 internal class OnboardingOptions
 {
-    internal OnboardingOptions(string address, string protocol, string port)
+    internal OnboardingOptions(string address, string protocol, string port, string? name = null)
     {
+        Name = name ?? "defaultService";
+        Port = port;
         Address = address;
         Protocol = protocol;
-        Port = port;
         Timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
     }
 
+    public string Name { get; set; }
+    public string Port { get; set; }
     public string Address { get; set; }
     public string Protocol { get; set; }
-    public string Port { get; set; }
     public long Timestamp { get; set; }
 
     public void Validate()

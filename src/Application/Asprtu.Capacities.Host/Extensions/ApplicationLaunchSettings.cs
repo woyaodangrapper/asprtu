@@ -98,7 +98,6 @@ internal static class ApplicationLaunchSettings
             string? httpUrl = configuration["profiles:http:applicationUrl"];
             string? httpsUrl = configuration["profiles:https:applicationUrl"];
             string? profileUrl = configuration[$"profiles:{profile}:applicationUrl"];
-
             string urls = profileUrl ?? ((httpsUrl ?? httpUrl) ?? configuration["urls"])
                        ?? "http://localhost:5000"; // 默认地址
 

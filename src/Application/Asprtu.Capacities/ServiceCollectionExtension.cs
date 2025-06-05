@@ -1,5 +1,9 @@
-﻿using Asprtu.Capacities.Registrar;
+﻿using Asprtu.Capacities.EventHub.Mqtt;
+using Asprtu.Capacities.EventHub.Mqtt.Contracts;
+using Asprtu.Capacities.Registrar;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace Asprtu.Capacities;
 
@@ -15,5 +19,20 @@ public static class ServiceCollectionExtension
     {
         return RegistrarFactory.Create(builder)
             .UseAsprtus();
+    }
+
+    public static IHostApplicationBuilder AddMqtt<TBuilder>(this TBuilder builder) where TBuilder : IHostApplicationBuilder
+    {
+        // ILoggerFactory loggerFactory = sp.GetRequiredService<ILoggerFactory>();
+        // MqttConnection.Initialize(new(), loggerFactory);
+        // MqttConnection.Instance;
+
+        _ = builder.Services.AddSingleton<IMqttConnection>(sp =>
+         {
+             ILoggerFactory loggerFactory = sp.GetRequiredService<ILoggerFactory>();
+             return new MqttConnection(MqttConnection.CreateClient(new MqttOptions(), loggerFactory.CreateLogger<IMqttConnection>()));
+         });
+
+        return builder;
     }
 }

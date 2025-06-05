@@ -3,6 +3,7 @@ using Aspire.Onboarding;
 
 IDistributedApplicationBuilder builder = DistributedApplication.CreateBuilder(args);
 DefaultResource defaultResource = builder.CreateDefaultResource();
+DefaultResource mqttResource = builder.CreateMqttResource();
 
 IResourceBuilder<ContainerResource> mqtt = builder.AddMqtt();
 //// 集群模式
@@ -35,6 +36,7 @@ builder.AddProject<Projects.Asprtu_Capacities_Host>("asprtu-hybrid")
     .WaitFor(mqtt)
     .WithAPIsDocs("RESTful")
     .WithAPIsDocs("GraphQL", "/graphql")
+    .WithReferences(mqttResource)
     .WithReferences(defaultResource)
     .WithEnvironment("DOTNET_RUNNING_IN_CONTAINER", "True");
 

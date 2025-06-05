@@ -8,12 +8,17 @@ internal class MqttOptions
     /// <summary>
     /// 容器资源名称，默认为 "emqx"
     /// </summary>
-    public string ContainerName { get; set; } = "emqx";
+    public string ContainerName { get; set; } = "asprtu-emqx";
 
     /// <summary>
     /// 启用 emqx 的 linux 内核调优
     /// </summary>
     public bool UseTuning { get; set; } = false;
+
+    /// <summary>
+    /// 是否启用 EMQX 的集群模式
+    /// </summary>
+    public int UseCluster { get; set; } = 1;
 
     /// <summary>
     /// Docker 镜像名称，默认为 "emqx"

@@ -1,4 +1,5 @@
 ﻿using Aspire.Contracts;
+using Aspire.Onboarding;
 
 namespace Aspire.Extensions;
 
@@ -19,32 +20,46 @@ internal static class MqttResourceExtensions
         this IDistributedApplicationBuilder builder,
         Action<MqttOptions>? configure = null)
     {
-        // 1. 准备默认配置
+        //builder.Services.TryAddLifecycleHook<ConnectToMqttNetHook>();
+
         MqttOptions options = new();
         configure?.Invoke(options);
 
-        // 2. 调用 AddContainer 注册容器资源
-        IResourceBuilder<ContainerResource> container = builder.AddContainer(options.ContainerName, options.Image, options.Tag);
+        IResourceBuilder<ContainerResource> container
+            = builder.AddContainer(options.ContainerName, options.Image, options.Tag);
 
-        // 3. 如果指定了自定义 Docker 网络，则挂载到该网络，并加上别名
         if (!string.IsNullOrWhiteSpace(options.NetworkName))
         {
-            // 如果 NetworkAlias 为空，则让 containerName 作为默认别名
-            string alias = string.IsNullOrWhiteSpace(options.NetworkAlias)
-                ? options.ContainerName
-                : options.NetworkAlias;
+            // aspire 暂不支持自定义的网络 by https://github.com/dotnet/aspire/issues/850
 
-            container = container
-                .WithContainerRuntimeArgs("--network", options.NetworkName, "--network-alias", alias)
-                //.WithNetwork(options.NetworkName)
-                //.WithNetworkAlias(alias)
-                ;
+            //string alias = string.IsNullOrWhiteSpace(options.NetworkAlias)   // 如果 NetworkAlias 为空，则让 containerName 作为默认别名
+            //    ? options.ContainerName
+            //    : options.NetworkAlias;
+
+            // 可能预期的实现是这样的：
+            //var net1 = builder.AddNetwork("net1");
+            //var net2 = builder.AddNetwork("net2");
+
+            //var app1 = builder.AddContainer("app1", "image1")
+            //                  .AttachTo(net1);
+
+            //var app2 = builder.AddContainer("app2", "image2")
+            //                  .AttachTo(net1)
+            //                  .AttachTo(net2);
+
+            //var app2 = builder.AddContainer("app3", "image3")
+            //                  .AttachTo(net2);
         }
-
         if (options.UseTuning)
         {
             container = container.UseTuning();
         }
+        //container = container.WithAnnotation(new ReplicaAnnotation(3));
+
+        //if (options.UseCluster > 1)
+        //{
+        //    container = container.WithAnnotation(new ReplicaAnnotation(options.UseCluster));
+        //}
         // 4. 如果启用常见插件，设置环境变量让 EMQX 加载 Dashboard & Management 插件
         if (options.EnablePlugins)
         {
@@ -54,27 +69,56 @@ internal static class MqttResourceExtensions
                 // EMQX 从 v5 起可以直接用 EMQX_LOADED_PLUGINS 来加载插件
                 .WithEnvironment("EMQX_LOADED_PLUGINS", "emqx_dashboard,emqx_management");
         }
-
-        // 5. 暴露并映射 Dashboard HTTP 端口
+        //Listener tcp:default on 0.0.0.0:1883 started.
+        //Listener ssl:default on 0.0.0.0:8883 started.
+        //Listener ws:default on 0.0.0.0:8083 started.
+        //Listener wss:default on 0.0.0.0:8084 started.
         container = container.WithHttpEndpoint(
             name: "mqtt-dashboard",
             port: options.DashboardPort,
-            targetPort: 18083); // EMQX 容器内部 Dashboard 默认绑定 18083
+            targetPort: 18083);
 
-        // 6. 暴露并映射 MQTT TCP 端口
         container = container.WithEndpoint(
             name: "mqtt-tcp",
             scheme: "tcp",
             port: options.TcpPort,
             targetPort: 1883);
 
-        // 7. 暴露并映射 MQTT WebSocket 端口
+        container = container.WithEndpoint(
+            name: "mqtts-tcp",
+            scheme: "tcp",
+            port: options.TcpPort + 1,
+            targetPort: 8883);
+
         container = container.WithHttpEndpoint(
-            name: "mqtt-websocket",
+            name: "mqtt-ws",
             port: options.WebSocketPort,
             targetPort: 8083);
 
+        container = container.WithHttpEndpoint(
+            name: "mqtt-wss",
+            port: options.WebSocketPort + 1,
+            targetPort: 8084);
         return container;
+    }
+
+    internal static DefaultResource CreateMqttResource(this IDistributedApplicationBuilder builder)
+    {
+        string? config = builder.Configuration["Services:mqtt:default"];
+        if (string.IsNullOrEmpty(config))
+        {
+            throw new InvalidOperationException("Connection string is not configured.");
+        }
+
+        Dictionary<string, string> dict = Util.Parse(config);
+        KeyValuePair<string, string> stack = dict.First();
+
+        if (!dict.TryGetValue("port", out string? value) && string.IsNullOrEmpty(value))
+        {
+            throw new InvalidOperationException("Port is not configured.");
+        }
+        OnboardingOptions options = new(stack.Value, stack.Key, value, "mqtt");
+        return new(options);
     }
 
     /// <summary>
