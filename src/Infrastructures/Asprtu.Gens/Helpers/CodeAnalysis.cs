@@ -1,5 +1,4 @@
-﻿#if NET8_0_OR_GREATER
-using System.Diagnostics.CodeAnalysis;
+﻿#if Standard2_1
 #else
 
 namespace System.Diagnostics.CodeAnalysis

@@ -8,16 +8,10 @@ using System.Text;
 
 namespace Asprtu.Capacities.EventHub.Mqtt;
 
-public abstract class MqttAbstractSubscriber : BackgroundService
+public abstract class MqttAbstractSubscriber(IMqttConnection mqttConnection, ILogger<MqttAbstractSubscriber> logger) : BackgroundService
 {
-    private readonly IMqttConnection _mqttConnection;
-    private readonly ILogger<MqttAbstractSubscriber> _logger;
-
-    protected MqttAbstractSubscriber(IMqttConnection mqttConnection, ILogger<MqttAbstractSubscriber> logger)
-    {
-        _mqttConnection = mqttConnection;
-        _logger = logger;
-    }
+    private readonly IMqttConnection _mqttConnection = mqttConnection;
+    private readonly ILogger<MqttAbstractSubscriber> _logger = logger;
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -75,4 +69,25 @@ public abstract class MqttAbstractSubscriber : BackgroundService
     /// 消息处理逻辑
     /// </summary>
     protected abstract Task ProcessAsync(string topic, string message);
+
+    private bool _disposed;
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!_disposed)
+        {
+            if (disposing)
+            {
+                _mqttConnection.Dispose();
+            }
+            _disposed = true;
+        }
+    }
+
+    public override void Dispose()
+    {
+        Dispose(disposing: true);
+        base.Dispose();
+        GC.SuppressFinalize(this);
+    }
 }

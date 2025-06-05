@@ -41,6 +41,7 @@ public class SourceGenerator : IIncrementalGenerator
                 inspectors.Add(inspector);
             }
         }
+
         _predicate = filterBuilder.Build();
         _inspectorLookup = inspectorLookup.ToFrozenDictionary(t => t.Key, t => t.Value.ToImmutableArray());
     }
@@ -74,18 +75,19 @@ public class SourceGenerator : IIncrementalGenerator
     // 所有的代码生成器，用来最后生成代码
     private static readonly ISyntaxGenerator[] _generators = [
           new LibraryLoaderSyntaxGenerator(),
-          //new LibraryFactoriesLoaderSyntaxGenerator()
+          new LibraryFactoriesLoaderSyntaxGenerator()
     ];
 
     // 收集完语法信息后用的后处理器，比如跨项目找特性的类
     private static readonly IPostCollectSyntaxTransformer[] _postCollectTransformers = [
-        new AttributedCrossClassTransformer(AttributeFullName)
+        new AttributedCrossClassTransformer([AttributeFullName]),
+        new FactoriesCrossClassTransformer()
     ];
 
     // 所有的语法检查器，比如用来找加了某个特性的类
     private static readonly ISyntaxInspector[] _allInspectors = [
         new LibraryAttributeInspector(),
-        //new LibraryFactoriesInspector(),
+        new LibraryFactoriesInspector(),
     ];
 
     private static void Execute(
@@ -151,12 +153,13 @@ public class SourceGenerator : IIncrementalGenerator
         Compilation compilation,
         ImmutableArray<SyntaxInfo> syntaxInfos)
     {
+        var _syntaxInfos = ImmutableArray.CreateBuilder<SyntaxInfo>();
+
         foreach (var transformer in _postCollectTransformers)
         {
-            syntaxInfos = transformer.Transform(compilation, syntaxInfos);
+            _syntaxInfos.AddRange(transformer.Transform(compilation, syntaxInfos));
         }
-
-        return syntaxInfos;
+        return _syntaxInfos.ToImmutable();
     }
 }
 

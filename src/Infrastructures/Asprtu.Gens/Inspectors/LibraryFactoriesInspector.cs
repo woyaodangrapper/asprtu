@@ -11,10 +11,10 @@ namespace Asprtu.Gens.Inspectors
 {
     public sealed class LibraryFactoriesInspector : ISyntaxInspector
     {
-        public ImmutableArray<ISyntaxFilter> Filters { get; } = [];
+        public ImmutableArray<ISyntaxFilter> Filters { get; } = [ClassWithAnyInterface.Instance];
 
         public IImmutableSet<SyntaxKind> SupportedKinds { get; } =
-            [SyntaxKind.ClassDeclaration, SyntaxKind.RecordDeclaration];
+            [SyntaxKind.ClassDeclaration];
 
         public bool TryHandle(
             GeneratorSyntaxContext context,
@@ -22,30 +22,26 @@ namespace Asprtu.Gens.Inspectors
         {
             syntaxInfo = null;
 
-            if (context.Node is not TypeDeclarationSyntax typeDecl)
+            if (context.Node is not ClassDeclarationSyntax classDecl)
                 return false;
 
-            if (context.SemanticModel.GetDeclaredSymbol(typeDecl) is not INamedTypeSymbol typeSymbol)
+            if (context.SemanticModel.GetDeclaredSymbol(classDecl) is not INamedTypeSymbol typeSymbol)
                 return false;
 
-            foreach (var iface in typeSymbol.AllInterfaces)
+            if (typeSymbol.AllInterfaces.Length == 0)
+                return false;
+
+            foreach (var attribute in classDecl.AttributeLists.SelectMany(a => a.Attributes))
             {
-                if (iface.OriginalDefinition.ToDisplayString() is
-                    "ILibraryFactory<T>" or "ILibraryCapacitiesFactory<T>")
+                if (context.SemanticModel.GetSymbolInfo(attribute).Symbol is IMethodSymbol methodSymbol)
                 {
-                    // 提取泛型参数
-                    var typeArg = iface.TypeArguments.FirstOrDefault();
-                    var capabilityType = typeArg?.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat) ?? "unknown";
-
-                    syntaxInfo = new FactoryInfo(
-                         typeName: typeSymbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat),
-                         interfaceName: iface.OriginalDefinition.Name,
-                         capabilityType: iface.TypeArguments.First().ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)
-                     );
+                    var implFullName = typeSymbol.ToDisplayString();
+                    var interfaceFullName = $"{typeSymbol.ContainingNamespace}.{typeSymbol.Name}";
+                    syntaxInfo = new LibraryInfo(implFullName, interfaceFullName);
                     return true;
                 }
             }
-
+            syntaxInfo = default;
             return false;
         }
     }

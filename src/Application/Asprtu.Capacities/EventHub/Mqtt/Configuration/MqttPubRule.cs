@@ -1,9 +1,9 @@
-namespace Asprtu.Capacities.EventHub.Mqtt;
+namespace Asprtu.Capacities.EventHub.Mqtt.Configuration;
 
-public class MqttPublishTopic
+public class MqttPubRule
 {
     /// <summary> 主题 </summary>
-    public string Topic { get; set; } = string.Empty;
+    public string Topic { get; set; } = "default/topic";
 
     /// <summary> 服务质量级别（0=最多一次, 1=至少一次, 2=仅一次）</summary>
     public int Qos { get; set; } = 1;

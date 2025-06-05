@@ -35,13 +35,13 @@ public sealed class LibraryFactoriesLoaderSyntaxGenerator : ISyntaxGenerator
             if (syntaxInfo is not FactoryInfo library)
             { continue; }
 
-            generator.WriteRegisterFactoryLoaderGroup(library.TypeName, library.InterfaceName);
+            generator.WriteRegisterFactoryLoaderGroup(library.TypeName, library.CapabilityType);
         }
 
         generator.WriteEndRegistrationMethod();
         generator.WriteEndClass();
         generator.WriteEndNamespace();
 
-        addSource("LibraryExtensionsLoaderModule.Hash.g.cs", generator.ToSourceText());
+        addSource("LibraryFactoryExtensionsLoaderModule.Hash.g.cs", generator.ToSourceText());
     }
 }

@@ -1,6 +1,8 @@
 ﻿using Asprtu.Capacities.EventHub.Mqtt;
+using Asprtu.Capacities.EventHub.Mqtt.Configuration;
 using Asprtu.Capacities.EventHub.Mqtt.Contracts;
 using Asprtu.Capacities.Registrar;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -21,18 +23,44 @@ public static class ServiceCollectionExtension
             .UseAsprtus();
     }
 
-    public static IHostApplicationBuilder AddMqtt<TBuilder>(this TBuilder builder) where TBuilder : IHostApplicationBuilder
+    /// <summary>
+    /// 注册并初始化 MQTT 客户端连接服务，将 <see cref="IMqttConnection"/> 添加为单例到依赖注入容器中。
+    /// </summary>
+    /// <typeparam name="TBuilder">主机构建器类型，必须实现 <see cref="IHostApplicationBuilder"/>。</typeparam>
+    /// <param name="builder">用于构建应用程序主机的构建器实例。</param>
+    /// <param name="configure">可选的 MQTT 配置委托，用于自定义 <see cref="MqttOptions"/>。</param>
+    /// <returns>返回用于链式调用的 <paramref name="builder"/> 实例。</returns>
+    public static TBuilder AddMqtt<TBuilder>(
+    this TBuilder builder,
+    Action<MqttOptions>? configure = null) where TBuilder : IHostApplicationBuilder
     {
-        // ILoggerFactory loggerFactory = sp.GetRequiredService<ILoggerFactory>();
-        // MqttConnection.Initialize(new(), loggerFactory);
-        // MqttConnection.Instance;
-
+        MqttOptions options = new();
+        configure?.Invoke(options);
         _ = builder.Services.AddSingleton<IMqttConnection>(sp =>
-         {
-             ILoggerFactory loggerFactory = sp.GetRequiredService<ILoggerFactory>();
-             return new MqttConnection(MqttConnection.CreateClient(new MqttOptions(), loggerFactory.CreateLogger<IMqttConnection>()));
-         });
+        {
+            ILoggerFactory loggerFactory = sp.GetRequiredService<ILoggerFactory>();
+            IConfiguration configuration = sp.GetRequiredService<IConfiguration>();
+
+            ILogger<IMqttConnection> logger = loggerFactory.CreateLogger<IMqttConnection>();
+            IEnumerable<IConfigurationSection> mqttServers = configuration
+               .GetSection("services:mqtt:default").GetChildren();
+
+            if (string.IsNullOrEmpty(options.HostList) && mqttServers.Any())
+            {
+                _mqttServerAddressOverridden(logger, null);
+                options.HostList = string.Join(",", mqttServers.Select(s => s.Value).Where(v => !string.IsNullOrWhiteSpace(v)));
+            }
+            return string.IsNullOrEmpty(options.HostList)
+                ? throw new ArgumentNullException(nameof(configure), "MQTT 服务器地址列表不能为空。请在配置文件中设置 'services:mqtt:default' 或直接传入 HostList。")
+                : new MqttConnection(MqttConnection.CreateClient(options, logger));
+        });
 
         return builder;
     }
+
+    private static readonly Action<ILogger, Exception?> _mqttServerAddressOverridden =
+      LoggerMessage.Define(
+          LogLevel.Warning,
+          new EventId(1, nameof(IMqttConnection)),
+          "MQTT服务器地址已被默认配置覆盖，这是预期行为。将使用配置文件中的地址列表。");
 }

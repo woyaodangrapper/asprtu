@@ -1,8 +1,8 @@
+using Asprtu.Gens.Filters;
+using Asprtu.Gens.Models;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Asprtu.Gens.Filters;
-using Asprtu.Gens.Models;
 using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -16,10 +16,7 @@ namespace Asprtu.Gens.Inspectors
         // 支持处理的节点类型：类、结构、接口、枚举
         public IImmutableSet<SyntaxKind> SupportedKinds { get; } =
         [
-            SyntaxKind.ClassDeclaration,
-            SyntaxKind.RecordDeclaration,
-            SyntaxKind.InterfaceDeclaration,
-            SyntaxKind.EnumDeclaration
+            SyntaxKind.ClassDeclaration
         ];
 
         public bool TryHandle(

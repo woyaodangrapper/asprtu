@@ -16,7 +16,7 @@ public class TcpClientCapacity : AbstractCapacity, ITcpClient
         _capacities = capacities
             ?? throw new ArgumentNullException(nameof(capacities));
 
-        foreach (var capacity in _capacities)
+        foreach (ILibraryCapacities capacity in _capacities)
         {
             if (capacity.Name == "TcpClient" && capacity.Contracts is Rtu.TcpClient.Contracts.ITcpClient tcpClient)
             {

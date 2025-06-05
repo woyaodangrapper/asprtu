@@ -1,6 +1,6 @@
-namespace Asprtu.Capacities.EventHub.Mqtt;
+namespace Asprtu.Capacities.EventHub.Mqtt.Configuration;
 
-public class MqttSubscribeTopic
+public class MqttSubRule
 {
     /// <summary> 订阅的主题，可使用通配符，如 "sensors/+" </summary>
     public string Topic { get; set; } = string.Empty;

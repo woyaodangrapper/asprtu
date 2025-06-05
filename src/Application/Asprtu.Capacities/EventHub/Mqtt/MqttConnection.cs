@@ -1,8 +1,11 @@
+using Asprtu.Capacities.EventHub.Mqtt.Configuration;
 using Asprtu.Capacities.EventHub.Mqtt.Contracts;
 using Asprtu.Capacities.EventHub.Mqtt.Helpers;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using MQTTnet;
+using MQTTnet.Protocol;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Security.Authentication;
 using System.Text;
@@ -46,9 +49,9 @@ public sealed class MqttConnection : IMqttConnection
 
     public IMqttClient Connection { get; set; } = new MqttClientFactory().CreateMqttClient();
 
-    public static IMqttClient CreateClient([NotNull] MqttOptions options, [NotNull] ILogger logger, TimeSpan? reconnectInterval = null)
+    public static IMqttClient CreateClient([NotNull] MqttOptions options, [NotNull] ILogger logger)
     {
-        reconnectInterval ??= TimeSpan.FromSeconds(5);
+        //reconnectInterval ??= TimeSpan.FromSeconds(options.KeepAlivePeriodSeconds);
 
         MqttClientFactory factory = new();
         IMqttClient client = factory.CreateMqttClient();
@@ -56,6 +59,9 @@ public sealed class MqttConnection : IMqttConnection
 
         MqttClientOptionsBuilder builder = new MqttClientOptionsBuilder()
             .WithClientId(options.ClientId ?? Guid.NewGuid().ToString("N"))
+            .WithWillQualityOfServiceLevel(MqttQualityOfServiceLevel.AtLeastOnce)
+            .WithWillDelayInterval(60)
+            .WithTimeout(TimeSpan.FromSeconds(options.KeepAlivePeriodSeconds))
             .WithCleanSession(options.CleanSession);
 
         if (Util.ToMqttEndpoints(options.HostList) is { } endpoints && endpoints.Any())
@@ -88,6 +94,11 @@ public sealed class MqttConnection : IMqttConnection
         MqttClientOptions clientOptions = builder.Build();
         try
         {
+            if (Debugger.IsAttached)
+            {
+                // 调试模式下等待一段时间，避免连接过快导致问题
+                Thread.Sleep(options.KeepAlivePeriodSeconds * 1000);
+            }
             _ = client.ConnectAsync(clientOptions).GetAwaiter().GetResult();
         }
         catch (Exception ex)

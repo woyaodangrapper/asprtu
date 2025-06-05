@@ -18,7 +18,8 @@ builder.AddLibraryList();
 // Add service defaults & Aspire client integrations.
 builder.AddHostDefaults()
     .AddSwagger()
-    .AddAsprtu();
+    .AddAsprtu()
+    .AddMqtt();
 
 builder.AddEndpoints()
     .AddGraphQL();

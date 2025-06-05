@@ -35,7 +35,7 @@ public sealed class LibraryLoaderSyntaxGenerator : ISyntaxGenerator
             if (syntaxInfo is not LibraryInfo library)
             { continue; }
 
-            generator.WriteRegisterEnumerableLoaderGroup(library.InterfaceName);
+            generator.WriteRegisterSingletonLoader(library.InterfaceName);
         }
 
         generator.WriteEndRegistrationMethod();

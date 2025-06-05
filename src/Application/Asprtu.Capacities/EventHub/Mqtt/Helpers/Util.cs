@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using System.Text;
 
 namespace Asprtu.Capacities.EventHub.Mqtt.Helpers;
 
@@ -52,6 +53,55 @@ internal static class Util
                });
 
         return endpoints;
+    }
+
+    /// <summary>
+    /// 通用对象转字节数组
+    /// </summary>
+    public static byte[] GetBytes(object obj)
+    {
+        ArgumentNullException.ThrowIfNull(obj);
+
+        return obj switch
+        {
+            int i => BitConverter.GetBytes(i),
+            float f => BitConverter.GetBytes(f),
+            double d => BitConverter.GetBytes(d),
+            bool b => BitConverter.GetBytes(b),
+            short s => BitConverter.GetBytes(s),
+            long l => BitConverter.GetBytes(l),
+            byte bt => [bt],
+            char c => BitConverter.GetBytes(c),
+            decimal dec => DecimalToBytes(dec),
+            string str => Encoding.UTF8.GetBytes(str),
+            DateTime dt => BitConverter.GetBytes(dt.ToBinary()),
+            _ => throw new NotSupportedException($"Type {obj.GetType()} is not supported.")
+        };
+    }
+
+    private static byte[] DecimalToBytes(decimal dec)
+    {
+        var bits = decimal.GetBits(dec);
+        byte[] result = new byte[bits.Length * sizeof(int)];
+        for (int i = 0; i < bits.Length; i++)
+        {
+            Array.Copy(BitConverter.GetBytes(bits[i]), 0, result, i * sizeof(int), sizeof(int));
+        }
+        return result;
+    }
+
+    private static decimal BytesToDecimal(byte[] bytes)
+    {
+        if (bytes.Length != 16)
+            throw new ArgumentException("Decimal bytes array must have 16 elements.", nameof(bytes));
+
+        int[] bits = new int[4];
+        for (int i = 0; i < 4; i++)
+        {
+            bits[i] = BitConverter.ToInt32(bytes, i * 4);
+        }
+
+        return new decimal(bits);
     }
 
     public static readonly Action<ILogger, string, Exception?> LogInformationMessage =

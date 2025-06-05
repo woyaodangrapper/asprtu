@@ -6,19 +6,10 @@ public sealed class FactoryInfo : SyntaxInfo
 {
     public override string OrderByKey => $"{InterfaceName}<{CapabilityType}>";
 
-    /// <summary>
-    /// 实现类的完整名称，例如 "MyApp.Factories.TcpClientFactory"
-    /// </summary>
     public string TypeName { get; }
 
-    /// <summary>
-    /// 实现的接口名，"ILibraryFactory" 或 "ILibraryCapacitiesFactory"
-    /// </summary>
     public string InterfaceName { get; }
 
-    /// <summary>
-    /// 泛型参数类型的完整名称，例如 "MyApp.Contracts.TcpClient"
-    /// </summary>
     public string CapabilityType { get; }
 
     public FactoryInfo(string typeName, string interfaceName, string capabilityType)

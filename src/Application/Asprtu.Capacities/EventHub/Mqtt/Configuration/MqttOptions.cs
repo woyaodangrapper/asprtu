@@ -1,4 +1,4 @@
-﻿namespace Asprtu.Capacities.EventHub.Mqtt;
+﻿namespace Asprtu.Capacities.EventHub.Mqtt.Configuration;
 
 /// <summary>
 /// 与 appsettings.json 中的 "Mqtt" 节对应
@@ -7,8 +7,7 @@
 public class MqttOptions
 {
     /// <summary>
-    /// 形如 "broker1.example.com:1883,broker2.example.com:1883" 的逗号分隔列表
-    /// 如果只是单节点，也可以只写 "broker.example.com:1883"
+    /// "协议://主机:端口[/路径],…"链接列表
     /// </summary>
     public string HostList { get; set; } = string.Empty;
 
