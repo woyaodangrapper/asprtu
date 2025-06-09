@@ -1,4 +1,4 @@
-﻿namespace Aspire.Configuration;
+﻿namespace Asprtu.Core.Extensions.Module;
 
 public interface IModule<out TConfig>
     where TConfig : class

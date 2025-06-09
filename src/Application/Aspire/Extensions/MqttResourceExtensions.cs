@@ -1,6 +1,7 @@
-﻿using Aspire.Configuration;
-using Aspire.Contracts;
+﻿using Aspire.Contracts;
 using Aspire.Onboarding;
+using Asprtu.Core.Extensions;
+using Asprtu.Core.Extensions.Module;
 
 namespace Aspire.Extensions;
 
@@ -17,7 +18,7 @@ internal static class MqttResourceExtensions
         Action<MqttOptions>? configure = null)
     {
         //builder.Services.TryAddLifecycleHook<ConnectToMqttNetHook>();
-        ModuleProvider moduleProvider = ConfigurationLoader.TryLoad(builder.Configuration);
+        ModuleProvider moduleProvider = ModuleLoaderExtensions.TryLoad(builder.Configuration);
         MqttOptions options;
         if (moduleProvider.TryGet(out IModule<MqttServerConfig>? mqttServerModule) && mqttServerModule is { } module)
         {
@@ -121,9 +122,9 @@ internal static class MqttResourceExtensions
 
     internal static DefaultResource CreateMqttResource(this IDistributedApplicationBuilder builder)
     {
-        ModuleProvider moduleProvider = ConfigurationLoader.TryLoad(builder.Configuration);
+        ModuleProvider moduleProvider = ModuleLoaderExtensions.TryLoad(builder.Configuration);
         return moduleProvider.TryGet(out IModule<MqttServerConfig>? mqttServerModule) && mqttServerModule is { } module
-            ? new DefaultResource(module.Config.BrokerUrl.ToString(), module.Type, module.Name, module.Enabled)
+            ? new DefaultResource(module.Config.BrokerUrl.ToString(), module.Type, module.Name)
             : throw new InvalidOperationException("MqttClientModule is not configured.");
     }
 

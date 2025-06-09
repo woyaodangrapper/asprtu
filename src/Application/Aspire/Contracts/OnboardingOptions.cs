@@ -2,13 +2,12 @@
 
 internal class OnboardingOptions
 {
-    internal OnboardingOptions(string host, string type, string port, bool enabled = false, string? name = null)
+    internal OnboardingOptions(string host, string type, string port, string? name = null)
     {
         Name = name ?? "defaultService";
         Port = port;
         Type = type;
         Host = host;
-        Enabled = enabled;
         Timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
     }
 
@@ -16,7 +15,6 @@ internal class OnboardingOptions
     public string Type { get; set; }
     public string Host { get; set; }
     public string Port { get; set; }
-    public bool Enabled { get; set; }
     public long Timestamp { get; set; }
 
     public void Validate()

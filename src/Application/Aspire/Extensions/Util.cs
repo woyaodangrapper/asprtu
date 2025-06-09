@@ -14,7 +14,7 @@ internal static class Util
         // 使用正则在大写前插入 -
         string result = Regex.Replace(input, "(?<!^)([A-Z])", "-$1");
 
-        return result.ToLowerInvariant();
+        return result.ToUpperInvariant();
     }
 
     internal static Dictionary<string, string> Parse(string connectionString)

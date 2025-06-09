@@ -17,12 +17,12 @@ builder.Services.ConfigureHttpJsonOptions(options => options.SerializerOptions.T
 builder.AddAppsettings();
 builder.AddLibraryList()
     .AddLibraryFactory();
-
+builder.AddLibraryOptions();
 // Add service defaults & Aspire client integrations.
 builder.AddHostDefaults()
     .AddSwagger()
-    .AddAsprtu()
-    .AddMqtt();
+    .AddMqtt()
+    .AddAsprtu();
 
 builder.AddEndpoints()
     .AddGraphQL();

@@ -1,6 +1,7 @@
-﻿using Aspire.Configuration;
-using Aspire.Contracts;
+﻿using Aspire.Contracts;
 using Aspire.Onboarding;
+using Asprtu.Core.Extensions;
+using Asprtu.Core.Extensions.Module;
 
 namespace Aspire.Extensions
 {
@@ -28,7 +29,7 @@ namespace Aspire.Extensions
 
         internal static DefaultResource[] CreateModulesResource(this IDistributedApplicationBuilder builder)
         {
-            ModuleProvider moduleProvider = ConfigurationLoader.TryLoad(builder.Configuration);
+            ModuleProvider moduleProvider = ModuleLoaderExtensions.TryLoad(builder.Configuration);
 
             List<DefaultResource> resources = [];
 
@@ -37,15 +38,27 @@ namespace Aspire.Extensions
                 switch (module)
                 {
                     case IModule<MqttServerConfig> mqtt:
-                        resources.Add(new DefaultResource(mqtt.Config.BrokerUrl.ToString(), mqtt.Type, mqtt.Name, mqtt.Enabled));
+                        if (!mqtt.Enabled)
+                        {
+                            continue;
+                        }
+                        resources.Add(new DefaultResource(mqtt.Config.BrokerUrl.ToString(), mqtt.Type, mqtt.Name));
                         break;
 
                     case IModule<MqttClientConfig> mqttClient:
-                        resources.Add(new DefaultResource(mqttClient.Config.BrokerUrl.ToString(), mqttClient.Type, mqttClient.Name, mqttClient.Enabled));
+                        if (!mqttClient.Enabled)
+                        {
+                            continue;
+                        }
+                        resources.Add(new DefaultResource(mqttClient.Config.BrokerUrl.ToString(), mqttClient.Type, mqttClient.Name));
                         break;
 
                     case IModule<TcpServiceConfig> tcp:
-                        resources.Add(new DefaultResource(tcp.Config.BrokerUrl.ToString(), tcp.Type, tcp.Name, tcp.Enabled));
+                        if (!tcp.Enabled)
+                        {
+                            continue;
+                        }
+                        resources.Add(new DefaultResource(tcp.Config.BrokerUrl.ToString(), tcp.Type, tcp.Name));
                         break;
 
                     default:
@@ -71,10 +84,11 @@ namespace Aspire.Extensions
        this IResourceBuilder<TDestination> builder,
        DefaultResource[] resource) where TDestination : IResourceWithEnvironment
         {
-            for (int i = 0; i == resource.Length; i++)
+            for (int i = 0; i < resource.Length; i++)
             {
                 _ = builder.WithReferences(resource[i]);
             }
+
             return builder;
         }
     }

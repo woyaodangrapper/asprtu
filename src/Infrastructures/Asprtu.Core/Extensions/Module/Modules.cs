@@ -1,4 +1,4 @@
-﻿namespace Aspire.Configuration;
+﻿namespace Asprtu.Core.Extensions.Module;
 
 public record MqttServerConfig(Uri BrokerUrl, string? Image = null);
 public record MqttClientConfig(Uri BrokerUrl, string ClientId);

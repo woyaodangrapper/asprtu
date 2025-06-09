@@ -1,10 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<Import Project="..\..\..\build\common.props" />
-
+	<PropertyGroup>
+		<EnableConfigurationBindingGenerator>true</EnableConfigurationBindingGenerator>
+	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Grpc.HealthCheck" Version="2.71.0" />
 		<PackageReference Include="Grpc.AspNetCore.HealthChecks" Version="2.71.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="10.0.0-preview.5.25277.114" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.0-preview.4.25258.110" />
 		<PackageReference Include="Scrutor" Version="6.0.1" />
 

@@ -11,7 +11,7 @@ internal class DefaultResource : Resource, IResourceWithConnectionString
 
     public ReferenceExpression ConnectionStringExpression { get; }
 
-    internal DefaultResource(string url, string type, string name, bool enabled = false)
+    internal DefaultResource(string url, string type, string name)
       : base(name)
     {
         if (!Uri.TryCreate(url, UriKind.Absolute, out Uri? uri))
@@ -19,7 +19,7 @@ internal class DefaultResource : Resource, IResourceWithConnectionString
             throw new ArgumentException($"Invalid URL: {url}", nameof(url));
         }
         ServiceUri = uri;
-        _options = new OnboardingOptions(uri.Host, type, uri.Port.ToString(), enabled, name);
+        _options = new OnboardingOptions(uri.Host, type, uri.Port.ToString(), name);
         ConnectionStringExpression = BuildConnectionStringExpression(_options, uri.Scheme);
     }
 
