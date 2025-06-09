@@ -16,10 +16,10 @@ internal static class NotifySuperiors
     public static INotifySuperiors Create(this DefaultResource resource, ILoggerFactory? loggerFactory = null)
 
     {
-        INotifySuperiors registrar = resource.Protocol.ToLower(System.Globalization.CultureInfo.CurrentCulture) switch
+        INotifySuperiors registrar = resource.ServiceUri.Host.ToLower(System.Globalization.CultureInfo.CurrentCulture) switch
         {
             "http" => new HttpRegistrar(new HttpClient(), resource, loggerFactory ?? NullLoggerFactory.Instance),
-            _ => throw new NotSupportedException($"Unsupported protocol: {resource.Protocol}")
+            _ => throw new NotSupportedException($"Unsupported protocol: {resource.ServiceUri.Host}")
         };
 
         return registrar;

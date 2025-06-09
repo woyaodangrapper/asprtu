@@ -6,7 +6,7 @@
 internal class MqttOptions
 {
     /// <summary>
-    /// 容器资源名称，默认为 "emqx"
+    /// 容器资源名称，默认为 "asprtu-emqx"
     /// </summary>
     public string ContainerName { get; set; } = "asprtu-emqx";
 

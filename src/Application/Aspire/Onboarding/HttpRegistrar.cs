@@ -17,11 +17,13 @@ internal class HttpRegistrar : INotifySuperiors
         _logger = loggerFactory.CreateLogger<HttpRegistrar>();
     }
 
-    public async Task<bool> RegisterAsync(CancellationToken cancellationToken = default)
+    public Task<bool> RegisterAsync(CancellationToken cancellationToken = default) => RegisterAsync($"{_resource.ServiceUri}/asprtu/a-{_resource.AppId}/register", cancellationToken);
+
+    public async Task<bool> RegisterAsync(string requestUri, CancellationToken cancellationToken = default)
     {
         var payload = new
         { };
-        HttpResponseMessage response = await _httpClient.PostAsJsonAsync($"{_resource.ServiceUri}/asprtu/a-{_resource.AppId}/register", payload, cancellationToken);
+        HttpResponseMessage response = await _httpClient.PostAsJsonAsync(requestUri, payload, cancellationToken);
         return response.EnsureSuccessStatusCode().IsSuccessStatusCode;
     }
 

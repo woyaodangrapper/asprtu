@@ -1,4 +1,5 @@
-﻿using Aspire.Contracts;
+﻿using Aspire.Configuration;
+using Aspire.Contracts;
 using Aspire.Onboarding;
 
 namespace Aspire.Extensions;
@@ -6,12 +7,7 @@ namespace Aspire.Extensions;
 internal static class MqttResourceExtensions
 {
     /// <summary>
-    /// 将 EMQX 容器注册到当前 DistributedApplication 中，并开放以下默认端口：
-    ///  - MQTT TCP: 1883
-    ///  - MQTT WebSocket: 8083
-    ///  - Dashboard 面板: 18083
-    ///
-    /// 可以通过可选回调参数 overrideOptions 修改默认配置。
+    /// 将 EMQX 容器注册到当前 DistributedApplication 中,优先使用配置文件中的 mqtt-server 模块（如存在）
     /// </summary>
     /// <param name="builder">Aspire 分布式应用构建器</param>
     /// <param name="configure">可选的 MqttOptions 配置回调</param>
@@ -21,8 +17,29 @@ internal static class MqttResourceExtensions
         Action<MqttOptions>? configure = null)
     {
         //builder.Services.TryAddLifecycleHook<ConnectToMqttNetHook>();
+        ModuleProvider moduleProvider = ConfigurationLoader.TryLoad(builder.Configuration);
+        MqttOptions options;
+        if (moduleProvider.TryGet(out IModule<MqttServerConfig>? mqttServerModule) && mqttServerModule is { } module)
+        {
+            string image = module.Config.Image ?? "emqx/emqx";
+            (string name, string tag) = image.Contains(':', StringComparison.Ordinal)
+                     ? (image.Split(':')[0], image.Split(':')[1])
+                     : (image, "latest");
 
-        MqttOptions options = new();
+            options = new MqttOptions
+            {
+                ContainerName = module.Name,
+                Image = name,
+                Tag = tag,
+                TcpPort = module.Config.BrokerUrl.Port,
+                UseTuning = false // 默认不启用调优
+            };
+        }
+        else
+        {
+            options = new MqttOptions();
+        }
+
         configure?.Invoke(options);
 
         IResourceBuilder<ContainerResource> container
@@ -104,21 +121,10 @@ internal static class MqttResourceExtensions
 
     internal static DefaultResource CreateMqttResource(this IDistributedApplicationBuilder builder)
     {
-        string? config = builder.Configuration["Services:mqtt:default"];
-        if (string.IsNullOrEmpty(config))
-        {
-            throw new InvalidOperationException("Connection string is not configured.");
-        }
-
-        Dictionary<string, string> dict = Util.Parse(config);
-        KeyValuePair<string, string> stack = dict.First();
-
-        if (!dict.TryGetValue("port", out string? value) && string.IsNullOrEmpty(value))
-        {
-            throw new InvalidOperationException("Port is not configured.");
-        }
-        OnboardingOptions options = new(stack.Value, stack.Key, value, "mqtt");
-        return new(options);
+        ModuleProvider moduleProvider = ConfigurationLoader.TryLoad(builder.Configuration);
+        return moduleProvider.TryGet(out IModule<MqttServerConfig>? mqttServerModule) && mqttServerModule is { } module
+            ? new DefaultResource(module.Config.BrokerUrl.ToString(), module.Type, module.Name, module.Enabled)
+            : throw new InvalidOperationException("MqttClientModule is not configured.");
     }
 
     /// <summary>

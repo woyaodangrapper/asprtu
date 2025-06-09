@@ -2,31 +2,38 @@
 
 internal class OnboardingOptions
 {
-    internal OnboardingOptions(string address, string protocol, string port, string? name = null)
+    internal OnboardingOptions(string host, string type, string port, bool enabled = false, string? name = null)
     {
         Name = name ?? "defaultService";
         Port = port;
-        Address = address;
-        Protocol = protocol;
+        Type = type;
+        Host = host;
+        Enabled = enabled;
         Timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
     }
 
     public string Name { get; set; }
+    public string Type { get; set; }
+    public string Host { get; set; }
     public string Port { get; set; }
-    public string Address { get; set; }
-    public string Protocol { get; set; }
+    public bool Enabled { get; set; }
     public long Timestamp { get; set; }
 
     public void Validate()
     {
-        if (string.IsNullOrWhiteSpace(Address))
+        if (string.IsNullOrWhiteSpace(Port))
         {
-            throw new ArgumentException("Address 不能为空", nameof(Address));
+            throw new ArgumentException("Port 不能为空", nameof(Port));
         }
 
-        if (string.IsNullOrWhiteSpace(Protocol))
+        if (string.IsNullOrWhiteSpace(Host))
         {
-            throw new ArgumentException("Protocol 不能为空", nameof(Protocol));
+            throw new ArgumentException("Host 不能为空", nameof(Host));
+        }
+
+        if (string.IsNullOrWhiteSpace(Type))
+        {
+            throw new ArgumentException("Type 不能为空", nameof(Type));
         }
     }
 }

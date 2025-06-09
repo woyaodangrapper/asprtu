@@ -17,7 +17,7 @@
             where T : IResourceWithEndpoints
         {
             // 端点名称根据apiType动态生成，防止冲突
-            string endpointName = apiType.ToLowerInvariant() + "-docs";
+            string endpointName = apiType.ToUpperInvariant() + "-docs";
 
             return builder.WithEndpoint(name: endpointName, scheme: "http").WithUrls(context =>
             {
