@@ -31,14 +31,19 @@ namespace Asprtu.Gens.Inspectors
             if (typeDecl.AttributeLists.Count == 0)
                 return false;
 
+            if (context.SemanticModel.GetDeclaredSymbol(typeDecl) is not INamedTypeSymbol typeSymbol)
+                return false;
+
+            if (typeSymbol.Interfaces.Length == 0)
+                return false;
+
             foreach (var attribute in typeDecl.AttributeLists.SelectMany(a => a.Attributes))
             {
-                if (context.SemanticModel.GetSymbolInfo(attribute).Symbol is IMethodSymbol methodSymbol &&
-                    context.SemanticModel.GetDeclaredSymbol(typeDecl) is INamedTypeSymbol typeSymbol)
+                if (context.SemanticModel.GetSymbolInfo(attribute).Symbol is IMethodSymbol methodSymbol)
                 {
                     var implFullName = typeSymbol.ToDisplayString();
-                    var interfaceFullName = $"{typeSymbol.ContainingNamespace}.{typeSymbol.Name}";
-                    syntaxInfo = new LibraryInfo(implFullName, interfaceFullName);
+                    var firstInterface = typeSymbol.Interfaces.FirstOrDefault()?.ToDisplayString();
+                    syntaxInfo = new LibraryInfo(implFullName, firstInterface ?? string.Empty);
                     return true;
                 }
             }

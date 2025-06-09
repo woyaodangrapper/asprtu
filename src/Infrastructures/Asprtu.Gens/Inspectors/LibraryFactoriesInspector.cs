@@ -36,8 +36,8 @@ namespace Asprtu.Gens.Inspectors
                 if (context.SemanticModel.GetSymbolInfo(attribute).Symbol is IMethodSymbol methodSymbol)
                 {
                     var implFullName = typeSymbol.ToDisplayString();
-                    var interfaceFullName = $"{typeSymbol.ContainingNamespace}.{typeSymbol.Name}";
-                    syntaxInfo = new LibraryInfo(implFullName, interfaceFullName);
+                    var firstInterface = typeSymbol.Interfaces.FirstOrDefault()?.ToDisplayString();
+                    syntaxInfo = new LibraryInfo(implFullName, firstInterface ?? string.Empty);
                     return true;
                 }
             }

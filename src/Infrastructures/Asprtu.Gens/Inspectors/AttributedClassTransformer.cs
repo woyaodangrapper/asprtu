@@ -55,8 +55,9 @@ public class AttributedCrossClassTransformer(IEnumerable<string> attributeFullNa
                 attributeSymbols.Contains(attr.AttributeClass, SymbolEqualityComparer.Default)))
             {
                 var implFullName = type.ToDisplayString();
-                var interfaceFullName = $"{type.ContainingNamespace}.{type.Name}";
-                var typeInfo = new LibraryInfo(implFullName, interfaceFullName);
+                //var interfaceFullName = $"{type.ContainingNamespace}.{type.Name}";
+                var firstInterface = type.Interfaces.FirstOrDefault()?.ToDisplayString();
+                var typeInfo = new LibraryInfo(implFullName, firstInterface ?? string.Empty);
 
                 if (addedKeys.Add(typeInfo.OrderByKey))
                 {

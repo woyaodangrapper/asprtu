@@ -59,19 +59,26 @@ public sealed class ModuleFileBuilder : IDisposable
             "builder.Services.TryAddEnumerable(ServiceDescriptor.Singleton(typeof(global::Asprtu.Rtu.Contracts.ILibraryCapacities), typeof(global::Asprtu.Rtu.LibraryCapacities<>).MakeGenericType(typeof(global::{0}))));",
             interfaceTypeName);
 
-    public void WriteRegisterSingletonLoader(string genericTypeName)
+    public void WriteRegisterSingletonLoader(string typeName, string interfaceTypeName)
     {
         _writer.WriteIndentedLine(
             "builder.Services.AddSingleton<global::Asprtu.Rtu.Contracts.ILibraryCapacities<global::{0}>, global::Asprtu.Rtu.LibraryCapacities<global::{0}>>();",
-            genericTypeName);
+            typeName);
+
+        //builder.Services.AddSingleton<ILibraryCapacities<ITcpServer>>(sp => sp.GetRequiredService<ILibraryCapacities<TcpServer>>());
 
         _writer.WriteIndentedLine(
             "builder.Services.AddSingleton<global::Asprtu.Rtu.Contracts.ILibraryCapacities>(sp => sp.GetRequiredService<global::Asprtu.Rtu.Contracts.ILibraryCapacities<global::{0}>>());",
-            genericTypeName);
+            typeName);
+
+        _writer.WriteIndentedLine(
+            "builder.Services.AddSingleton<global::Asprtu.Rtu.Contracts.ILibraryCapacities<global::{1}>>(sp => sp.GetRequiredService<global::Asprtu.Rtu.Contracts.ILibraryCapacities<global::{0}>>());",
+            typeName, interfaceTypeName);
+
         _writer.WriteLine();
     }
 
-    public void WriteRegisterFactoryLoaderGroup(string interfaceName, string typeName)
+    public void WriteRegisterFactoryLoaderGroup(string interfaceName, string typeName, string typeInterfaceName)
     {
         _writer.WriteIndentedLine(
             "builder.Services.AddSingleton<global::Asprtu.Rtu.Contracts.ILibraryFactory<{1}>, {0}>();",
@@ -80,6 +87,10 @@ public sealed class ModuleFileBuilder : IDisposable
         _writer.WriteIndentedLine(
             "builder.Services.AddSingleton<global::Asprtu.Rtu.Contracts.ILibraryCapacitiesFactory<{0}>, global::Asprtu.Rtu.LibraryCapacitiesFactory<{0}>>();",
              typeName);
+
+        _writer.WriteIndentedLine(
+            "builder.Services.AddSingleton<global::Asprtu.Rtu.Contracts.ILibraryCapacitiesFactory<{0}>>(sp => sp.GetRequiredService<global::Asprtu.Rtu.Contracts.ILibraryCapacitiesFactory<{1}>>());",
+            typeInterfaceName, typeName);
         _writer.WriteLine();
     }
 

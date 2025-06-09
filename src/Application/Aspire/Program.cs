@@ -38,6 +38,7 @@ builder.AddProject<Projects.Asprtu_Capacities_Host>("asprtu-hybrid")
     .WithAPIsDocs("GraphQL", "/graphql")
     .WithReferences(mqttResource)
     .WithReferences(defaultResource)
+    .WithEndpoint(name: "tcps", scheme: "tcp", port: 11868, targetPort: 1868)
     .WithEnvironment("DOTNET_RUNNING_IN_CONTAINER", "True");
 
 builder.AddDashboard();

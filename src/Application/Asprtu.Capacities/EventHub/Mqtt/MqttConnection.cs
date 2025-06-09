@@ -55,15 +55,15 @@ public sealed class MqttConnection : IMqttConnection
 
         MqttClientFactory factory = new();
         IMqttClient client = factory.CreateMqttClient();
-        Notification(client, logger, options.ClientId);
 
         MqttClientOptionsBuilder builder = new MqttClientOptionsBuilder()
-            .WithClientId(options.ClientId ?? Guid.NewGuid().ToString("N"))
+            .WithClientId(options.ClientId ??= Guid.NewGuid().ToString("N"))
             .WithWillQualityOfServiceLevel(MqttQualityOfServiceLevel.AtLeastOnce)
             .WithWillDelayInterval(60)
             .WithTimeout(TimeSpan.FromSeconds(options.KeepAlivePeriodSeconds))
             .WithCleanSession(options.CleanSession);
 
+        Notification(client, logger, options.ClientId);
         if (Util.ToMqttEndpoints(options.HostList) is { } endpoints && endpoints.Any())
         {
             foreach ((Uri uri, string type, string host, int port, string? path) in endpoints)

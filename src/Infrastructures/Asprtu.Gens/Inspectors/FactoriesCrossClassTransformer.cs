@@ -47,12 +47,12 @@ public class FactoriesCrossClassTransformer : IPostCollectSyntaxTransformer
             if (type.TypeKind != TypeKind.Class || type.IsAbstract)
                 continue;
 
-            if (ImplementsTargetInterface(type, out string? capabilityType))
+            if (ImplementsTargetInterface(type, out string? capabilityType, out string? interfaceName))
             {
                 var implFullName = type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
                 var interfaceFullName = type.ConstructedFrom.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
 
-                var typeInfo = new FactoryInfo(implFullName, interfaceFullName, capabilityType ?? string.Empty);
+                var typeInfo = new FactoryInfo(implFullName, interfaceFullName, capabilityType ?? string.Empty, interfaceName ?? string.Empty);
                 if (addedKeys.Add(typeInfo.OrderByKey))
                 {
                     result.Add(typeInfo);
@@ -66,10 +66,10 @@ public class FactoriesCrossClassTransformer : IPostCollectSyntaxTransformer
         }
     }
 
-    private static bool ImplementsTargetInterface(INamedTypeSymbol type, out string? genericArgName)
+    private static bool ImplementsTargetInterface(INamedTypeSymbol type, out string? genericArgName, out string? genericArgInterfaceName)
     {
         genericArgName = null;
-
+        genericArgInterfaceName = null;
         foreach (var iface in type.AllInterfaces)
         {
             var ifaceDef = iface.OriginalDefinition;
@@ -79,6 +79,7 @@ public class FactoriesCrossClassTransformer : IPostCollectSyntaxTransformer
                 var typeArg = iface.TypeArguments.FirstOrDefault();
                 if (typeArg != null)
                 {
+                    genericArgInterfaceName = typeArg.Interfaces.FirstOrDefault()?.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
                     genericArgName = typeArg.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
                 }
                 return true;

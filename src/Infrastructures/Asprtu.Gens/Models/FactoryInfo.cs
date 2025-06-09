@@ -12,11 +12,14 @@ public sealed class FactoryInfo : SyntaxInfo
 
     public string CapabilityType { get; }
 
-    public FactoryInfo(string typeName, string interfaceName, string capabilityType)
+    public string CapabilityInterfaceName { get; }
+
+    public FactoryInfo(string typeName, string interfaceName, string capabilityType, string capabilityInterfaceName)
     {
         TypeName = typeName;
         InterfaceName = interfaceName;
         CapabilityType = capabilityType;
+        CapabilityInterfaceName = capabilityInterfaceName;
     }
 
     public override bool Equals(SyntaxInfo? other) =>

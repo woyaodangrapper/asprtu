@@ -29,13 +29,12 @@ public sealed class LibraryLoaderSyntaxGenerator : ISyntaxGenerator
         generator.WriteBeginNamespace();
         generator.WriteBeginClass();
         generator.WriteBeginRegistrationMethod();
-
         foreach (var syntaxInfo in syntaxInfos)
         {
             if (syntaxInfo is not LibraryInfo library)
             { continue; }
 
-            generator.WriteRegisterSingletonLoader(library.InterfaceName);
+            generator.WriteRegisterSingletonLoader(library.TypeName, library.InterfaceName);
         }
 
         generator.WriteEndRegistrationMethod();

@@ -58,7 +58,7 @@ public class MqttPub : MqttAbstractPublisher, IMqttPub
         return await TryPublishAsync(payload, rule, cancellationToken).ConfigureAwait(false);
     }
 
-    public async Task<bool> TryPublishAsync(byte[] data, MqttPubRule? rule, CancellationToken cancellationToken)
+    public async Task<bool> TryPublishAsync(byte[] data, MqttPubRule? rule, CancellationToken cancellationToken = default)
     {
         string topic = rule?.Topic ?? GetDefaultTopic();
 

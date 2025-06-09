@@ -12,9 +12,12 @@ using System.Diagnostics;
 WebApplicationBuilder builder = WebApplication.CreateSlimBuilder(args);
 
 builder.Services.Configure<RouteOptions>(options => options.SetParameterPolicy<RegexInlineRouteConstraint>("regex"));
+builder.Services.ConfigureHttpJsonOptions(options => options.SerializerOptions.TypeInfoResolver = AppJsonSerializerContext.Default);
 
 builder.AddAppsettings();
-builder.AddLibraryList();
+builder.AddLibraryList()
+    .AddLibraryFactory();
+
 // Add service defaults & Aspire client integrations.
 builder.AddHostDefaults()
     .AddSwagger()

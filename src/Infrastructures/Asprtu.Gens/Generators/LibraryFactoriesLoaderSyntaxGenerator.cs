@@ -34,8 +34,7 @@ public sealed class LibraryFactoriesLoaderSyntaxGenerator : ISyntaxGenerator
         {
             if (syntaxInfo is not FactoryInfo library)
             { continue; }
-
-            generator.WriteRegisterFactoryLoaderGroup(library.TypeName, library.CapabilityType);
+            generator.WriteRegisterFactoryLoaderGroup(library.TypeName, library.CapabilityType, library.CapabilityInterfaceName);
         }
 
         generator.WriteEndRegistrationMethod();
