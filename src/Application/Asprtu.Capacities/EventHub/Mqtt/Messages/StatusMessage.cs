@@ -1,6 +1,6 @@
 ﻿namespace Asprtu.Capacities.EventHub.Mqtt.Messages;
 
-public class StatusMessage : MqttAbstractMessage
+public class HellMessage : MqttAbstractMessage
 {
-    public string Status { get; set; } = "default";
+    public string Say { get; set; } = "hello world!";
 }

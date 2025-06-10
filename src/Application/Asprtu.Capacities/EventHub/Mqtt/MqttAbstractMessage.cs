@@ -9,7 +9,7 @@ public abstract class MqttAbstractMessage
 }
 
 [JsonSourceGenerationOptions(WriteIndented = false, GenerationMode = JsonSourceGenerationMode.Default)]
-[JsonSerializable(typeof(StatusMessage))]
+[JsonSerializable(typeof(HellMessage))]
 public partial class MqttJsonContext : JsonSerializerContext
 {
 }

@@ -24,18 +24,22 @@ public static class ServiceCollectionExtension
     }
 
     /// <summary>
-    /// 注册并初始化 MQTT 客户端连接服务，将 <see cref="IMqttConnection"/> 添加为单例到依赖注入容器中。
+    /// 注册并初始化 MQTT 客户端连接服务，将 <see cref="IMqttConnection"/> 添加为单例到依赖注入容器中，
+    /// 同时注册 MQTT 上下文 <see cref="MqttContext{T}"/> 用于支持实体消息的调度与缓存处理。
     /// </summary>
     /// <typeparam name="TBuilder">主机构建器类型，必须实现 <see cref="IHostApplicationBuilder"/>。</typeparam>
     /// <param name="builder">用于构建应用程序主机的构建器实例。</param>
     /// <param name="configure">可选的 MQTT 配置委托，用于自定义 <see cref="MqttOptions"/>。</param>
     /// <returns>返回用于链式调用的 <paramref name="builder"/> 实例。</returns>
     public static TBuilder AddMqtt<TBuilder>(
-    this TBuilder builder,
-    Action<MqttOptions>? configure = null) where TBuilder : IHostApplicationBuilder
+        this TBuilder builder,
+        Action<MqttOptions>? configure = null) where TBuilder : IHostApplicationBuilder
     {
+        // 配置选项
         MqttOptions options = new();
         configure?.Invoke(options);
+
+        // 注册 MQTT 连接为单例
         _ = builder.Services.AddSingleton<IMqttConnection>(sp =>
         {
             ILoggerFactory loggerFactory = sp.GetRequiredService<ILoggerFactory>();
@@ -50,10 +54,17 @@ public static class ServiceCollectionExtension
                 _mqttServerAddressOverridden(logger, null);
                 options.HostList = string.Join(",", mqttServers.Select(s => s.Value).Where(v => !string.IsNullOrWhiteSpace(v)));
             }
+
             return string.IsNullOrEmpty(options.HostList)
                 ? throw new ArgumentNullException(nameof(configure), "MQTT 服务器地址列表不能为空。请在配置文件中设置 'services:mqtt:default' 或直接传入 HostList。")
                 : new MqttConnection(MqttConnection.CreateClient(options, logger));
         });
+
+        // 注册泛型 MQTT 上下文
+        _ = builder.Services.AddScoped(typeof(IMqttContext<>), typeof(MqttContext<>));
+
+        // 注册发布器
+        _ = builder.Services.AddSingleton<IMqttPub, MqttPub>();
 
         return builder;
     }

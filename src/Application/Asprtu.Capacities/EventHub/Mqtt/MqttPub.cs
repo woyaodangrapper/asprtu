@@ -1,7 +1,6 @@
 ﻿using Asprtu.Capacities.EventHub.Mqtt.Configuration;
 using Asprtu.Capacities.EventHub.Mqtt.Contracts;
 using Asprtu.Capacities.EventHub.Mqtt.Helpers;
-using Asprtu.Core.Attributes;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using MQTTnet;
@@ -12,7 +11,7 @@ using Qos = MQTTnet.Protocol.MqttQualityOfServiceLevel;
 
 namespace Asprtu.Capacities.EventHub.Mqtt;
 
-[Asprtus]
+//[Asprtus] 使用显式注册
 public class MqttPub : MqttAbstractPublisher, IMqttPub
 
 {
