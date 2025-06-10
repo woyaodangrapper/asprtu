@@ -2,6 +2,8 @@
 using Asprtu.Capacities.EventHub.Mqtt.Configuration;
 using Asprtu.Capacities.EventHub.Mqtt.Contracts;
 using Asprtu.Capacities.Registrar;
+using Asprtu.Core.Extensions;
+using Asprtu.Core.Extensions.Module;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -44,15 +46,13 @@ public static class ServiceCollectionExtension
         {
             ILoggerFactory loggerFactory = sp.GetRequiredService<ILoggerFactory>();
             IConfiguration configuration = sp.GetRequiredService<IConfiguration>();
-
             ILogger<IMqttConnection> logger = loggerFactory.CreateLogger<IMqttConnection>();
-            IEnumerable<IConfigurationSection> mqttServers = configuration
-               .GetSection("services:mqtt:default").GetChildren();
+            ModuleProvider moduleProvider = ModuleLoaderExtensions.TryLoad(configuration);
 
-            if (string.IsNullOrEmpty(options.HostList) && mqttServers.Any())
+            if (string.IsNullOrEmpty(options.HostList) && moduleProvider.TryGet(out IModule<MqttClientConfig>? mqttClientConfig))
             {
+                options.HostList = mqttClientConfig!.Config.BrokerUrl.ToString();
                 _mqttServerAddressOverridden(logger, null);
-                options.HostList = string.Join(",", mqttServers.Select(s => s.Value).Where(v => !string.IsNullOrWhiteSpace(v)));
             }
 
             return string.IsNullOrEmpty(options.HostList)
@@ -61,7 +61,7 @@ public static class ServiceCollectionExtension
         });
 
         // 注册泛型 MQTT 上下文
-        _ = builder.Services.AddScoped(typeof(IMqttContext<>), typeof(MqttContext<>));
+        _ = builder.Services.AddSingleton(typeof(IMqttContext<>), typeof(MqttContext<>));
 
         // 注册发布器
         _ = builder.Services.AddSingleton<IMqttPub, MqttPub>();

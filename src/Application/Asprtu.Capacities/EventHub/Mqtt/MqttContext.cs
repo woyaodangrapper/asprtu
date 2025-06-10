@@ -25,7 +25,7 @@ public class MqttContext<T> : HybridContext<T>, IMqttContext<T>
         ArgumentNullException.ThrowIfNull(loggerFactory);
 
         _logger = loggerFactory.CreateLogger<MqttContext<T>>();
-        _publisher = new Lazy<IMqttPub>(() => ActivatorUtilities.CreateInstance<IMqttPub>(provider));
+        _publisher = new Lazy<IMqttPub>(provider.GetRequiredService<IMqttPub>);
         _subject = new Subject<ChangeEntry<T>>();
 
         _ = _subject

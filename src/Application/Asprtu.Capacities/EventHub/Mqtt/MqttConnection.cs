@@ -5,7 +5,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using MQTTnet;
 using MQTTnet.Protocol;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Security.Authentication;
 using System.Text;
@@ -94,11 +93,6 @@ public sealed class MqttConnection : IMqttConnection
         MqttClientOptions clientOptions = builder.Build();
         try
         {
-            if (Debugger.IsAttached)
-            {
-                // 调试模式下等待一段时间，避免连接过快导致问题
-                Thread.Sleep(options.KeepAlivePeriodSeconds * 1000);
-            }
             _ = client.ConnectAsync(clientOptions).GetAwaiter().GetResult();
         }
         catch (Exception ex)
