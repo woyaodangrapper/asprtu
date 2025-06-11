@@ -15,7 +15,7 @@ public static class LibraryOptionExtensions
         {
             _ = builder.Services
                .AddSingleton(sp =>
-                    new Rtu.TcpServer.Contracts.ChannelOptions(module.Name, module.Config.BrokerUrl.Host, module.Config.BrokerUrl.Port)
+                    new Rtu.TcpServer.Contracts.ChannelOptions(module.Name, module.Config.Host.Host, module.Config.Host.Port)
                );
         }
 

@@ -40,8 +40,9 @@ public static class ModuleLoaderExtensions
         string name = section.GetValue<string>("name") ?? "";
         string type = section.GetValue<string>("type") ?? "";
         bool enabled = section.GetValue<bool>("enabled");
+        string image = section.GetValue<string>("image") ?? "";
         IConfigurationSection cfg = section.GetSection("config");
-        string broker = cfg.GetValue<string>("brokerUrl") ?? "";
+        string broker = cfg.GetValue<string>("host") ?? "";
 
         // 用 switch 表达式和 when 条件做所有分支
         module = name switch
@@ -52,7 +53,7 @@ public static class ModuleLoaderExtensions
                     Name = name,
                     Type = type,
                     Enabled = enabled,
-                    Config = new MqttServerConfig(serverUri!, section.GetValue<string?>("image"))
+                    Config = new MqttServerConfig(serverUri!, image, cfg.GetValue<bool>("Dashboard"))
                 },
 
             "mqtt-client" when broker.TryCreate(out Uri? clientUri) =>

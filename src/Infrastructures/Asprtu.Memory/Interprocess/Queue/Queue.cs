@@ -67,7 +67,7 @@ internal abstract class Queue : IDisposable
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     protected static unsafe long GetPaddedMessageLength(long bodyLength)
     {
-        var length = sizeof(MessageHeader) + bodyLength;
+        long length = sizeof(MessageHeader) + bodyLength;
 
         // Round up to the closest integer divisible by 8. This will add the [padding] if one is needed.
         return 8 * (long)Math.Ceiling(length / 8.0);

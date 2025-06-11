@@ -366,3 +366,6 @@ FodyWeavers.xsd
 /src/*Pro*
 /src/*pro*
 /src/*pro*/
+
+
+/src/Application/Aspire/Resources/data

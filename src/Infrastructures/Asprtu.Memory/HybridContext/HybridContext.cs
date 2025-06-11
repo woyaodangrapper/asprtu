@@ -63,7 +63,7 @@ public abstract class HybridContext<T> : QueueCache<ChangeEntry<T>>
                 break;
             }
 
-            if (result == null && entry == null)
+            if (result == null || entry == null)
             {
                 continue;
             }
@@ -80,15 +80,15 @@ public abstract class HybridContext<T> : QueueCache<ChangeEntry<T>>
             }
             catch (InvalidOperationException ex)
             {
-                HybridContextLogging.LogDispatchInvalidOperation(_logger, entry.Type, entry.Entity, ex);
+                HybridContextLogging.LogDispatchInvalidOperation(_logger, entry.Type, entry.Entity!, ex);
             }
             catch (ArgumentException ex)
             {
-                HybridContextLogging.LogDispatchArgumentError(_logger, entry.Type, entry.Entity, ex);
+                HybridContextLogging.LogDispatchArgumentError(_logger, entry.Type, entry.Entity!, ex);
             }
             catch (Exception ex)
             {
-                HybridContextLogging.LogDispatchUnexpectedError(_logger, entry.Type, entry.Entity, ex);
+                HybridContextLogging.LogDispatchUnexpectedError(_logger, entry.Type, entry.Entity!, ex);
                 throw; // Re-throw unexpected exceptions
             }
         }

@@ -10,23 +10,16 @@ using System.Diagnostics.CodeAnalysis;
 namespace Asprtu.Capacities.Implementation;
 
 [Asprtus]
-public class TcpServerCapacity : AbstractCapacity, ITcpServerCapacity
+public class TcpServerCapacity(
+    ILibraryCapacities<ITcpServer> tcpServer,
+    ILibraryCapacitiesFactory<ITcpServer> capacitiesFactory
+        ) : AbstractCapacity, ITcpServerCapacity
 {
-    protected readonly ILibraryCapacities<ITcpServer> _tcpServer;
-
-    protected readonly ILibraryCapacitiesFactory<ITcpServer> _capacitiesFactory;
-
-    public TcpServerCapacity(
-        ILibraryCapacities<ITcpServer> tcpServer,
-        ILibraryCapacitiesFactory<ITcpServer> capacitiesFactory
-        )
-    {
-        _tcpServer = tcpServer
+    private readonly ILibraryCapacities<ITcpServer> _tcpServer = tcpServer
             ?? throw new ArgumentNullException(nameof(tcpServer));
 
-        _capacitiesFactory = capacitiesFactory
+    private readonly ILibraryCapacitiesFactory<ITcpServer> _capacitiesFactory = capacitiesFactory
             ?? throw new ArgumentNullException(nameof(capacitiesFactory));
-    }
 
     private ITcpServer[] All => [.. _capacitiesFactory.All, _tcpServer.Contracts];
 

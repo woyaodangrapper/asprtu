@@ -1,8 +1,8 @@
 ﻿namespace Asprtu.Core.Extensions.Module;
 
-public record MqttServerConfig(Uri BrokerUrl, string? Image = null);
-public record MqttClientConfig(Uri BrokerUrl, string ClientId);
-public record TcpServiceConfig(Uri BrokerUrl);
+public record MqttServerConfig(Uri Host, string? Image = null, bool Dashboard = false);
+public record MqttClientConfig(Uri Host, string ClientId);
+public record TcpServiceConfig(Uri Host);
 public record MqttServerModule : IModule<MqttServerConfig>
 {
     public string Name { get; init; } = "mqtt-server";

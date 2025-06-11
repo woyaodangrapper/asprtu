@@ -42,7 +42,7 @@ namespace Aspire.Extensions
                         {
                             continue;
                         }
-                        resources.Add(new DefaultResource(mqtt.Config.BrokerUrl.ToString(), mqtt.Type, mqtt.Name));
+                        resources.Add(new DefaultResource(mqtt.Config.Host.ToString(), mqtt.Type, mqtt.Name));
                         break;
 
                     case IModule<MqttClientConfig> mqttClient:
@@ -50,7 +50,7 @@ namespace Aspire.Extensions
                         {
                             continue;
                         }
-                        resources.Add(new DefaultResource(mqttClient.Config.BrokerUrl.ToString(), mqttClient.Type, mqttClient.Name));
+                        resources.Add(new DefaultResource(mqttClient.Config.Host.ToString(), mqttClient.Type, mqttClient.Name));
                         break;
 
                     case IModule<TcpServiceConfig> tcp:
@@ -58,7 +58,7 @@ namespace Aspire.Extensions
                         {
                             continue;
                         }
-                        resources.Add(new DefaultResource(tcp.Config.BrokerUrl.ToString(), tcp.Type, tcp.Name));
+                        resources.Add(new DefaultResource(tcp.Config.Host.ToString(), tcp.Type, tcp.Name));
                         break;
 
                     default:

@@ -12,9 +12,9 @@ namespace Asprtu.Capacities.Implementation;
 [Asprtus]
 public class TcpClientCapacity : AbstractCapacity, ITcpClientCapacity
 {
-    protected readonly ILibraryCapacities<ITcpClient> _tcpClient;
+    private readonly ILibraryCapacities<ITcpClient> _tcpClient;
 
-    protected readonly ILibraryCapacitiesFactory<ITcpClient> _capacitiesFactory;
+    private readonly ILibraryCapacitiesFactory<ITcpClient> _capacitiesFactory;
 
     public TcpClientCapacity(
 

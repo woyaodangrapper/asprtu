@@ -23,7 +23,7 @@ internal class HttpRegistrar : INotifySuperiors
     {
         var payload = new
         { };
-        HttpResponseMessage response = await _httpClient.PostAsJsonAsync(requestUri, payload, cancellationToken);
+        HttpResponseMessage response = await _httpClient.PostAsJsonAsync(requestUri, payload, cancellationToken).ConfigureAwait(false);
         return response.EnsureSuccessStatusCode().IsSuccessStatusCode;
     }
 
@@ -31,7 +31,7 @@ internal class HttpRegistrar : INotifySuperiors
     {
         try
         {
-            return await RegisterAsync(cancellationToken);
+            return await RegisterAsync(cancellationToken).ConfigureAwait(false);
         }
         catch (Exception ex)
         {
