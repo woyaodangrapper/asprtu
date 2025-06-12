@@ -37,13 +37,13 @@ namespace Aspire.Extensions
             {
                 switch (module)
                 {
-                    case IModule<MqttServerConfig> mqtt:
-                        if (!mqtt.Enabled)
-                        {
-                            continue;
-                        }
-                        resources.Add(new DefaultResource(mqtt.Config.Host.ToString(), mqtt.Type, mqtt.Name));
-                        break;
+                    //case IModule<MqttServerConfig> mqtt:
+                    //    if (!mqtt.Enabled)
+                    //    {
+                    //        continue;
+                    //    }
+                    //    resources.Add(new DefaultResource(mqtt.Config.Host.ToString(), mqtt.Type, mqtt.Name));
+                    //    break;
 
                     case IModule<MqttClientConfig> mqttClient:
                         if (!mqttClient.Enabled)

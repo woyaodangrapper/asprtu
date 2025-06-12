@@ -1,12 +1,26 @@
-﻿using Aspire.Extensions;
+﻿using Aspire.Contracts;
+using Aspire.Extensions;
 using Aspire.Onboarding;
+using Asprtu.Core.Extensions;
 
 IDistributedApplicationBuilder builder = DistributedApplication.CreateBuilder(args);
 
 DefaultResource defaultResource = builder.CreateDefaultResource();
 DefaultResource[] modulesResource = builder.CreateModulesResource();
 
-IResourceBuilder<ContainerResource> mqtt = builder.AddMqtt();
+ModuleProvider moduleProvider = ModuleLoaderExtensions.TryLoad(builder.Configuration);
+
+MqttOptions options = new(moduleProvider);
+IResourceBuilder<ParameterResource> password = builder.AddParameter("password", options.Password);
+IResourceBuilder<ParameterResource> username = builder.AddParameter("username", options.Username);
+IResourceBuilder<ContainerResource> mqtt = builder.AddNanomq(options.Name)
+    .WithHttp(username: username, password: password, port: options.Host[Uri.UriSchemeHttp].Port)
+    .WithTcp(options.Host[Uri.UriSchemeNetTcp].Port);
+
+if (options.Dashboard)
+{
+    _ = builder.AddGrafana().WaitFor(mqtt);
+}
 //// 集群模式
 //List<Type> types = [];
 //HostCapacityExtension.GetProtocolList(types.Add);

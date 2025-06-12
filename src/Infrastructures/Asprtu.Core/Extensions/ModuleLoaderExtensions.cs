@@ -47,7 +47,7 @@ public static class ModuleLoaderExtensions
         // 用 switch 表达式和 when 条件做所有分支
         module = name switch
         {
-            "mqtt-server" when broker.TryCreate(out Uri? serverUri) =>
+            "mqtt-server" when broker.TryCreate(out Hosts serverUri) =>
                 new MqttServerModule
                 {
                     Name = name,
@@ -83,7 +83,7 @@ public static class ModuleLoaderExtensions
     /// <summary>
     /// 尝试将格式为 <c>schema=host;Port=port</c> 的连接字符串解析为 <see cref="Uri"/>。
     /// </summary>
-    /// <param name="str">输入字符串，格式为 schema=host;Port=port</param>
+    /// <param name="str">输入字符串，格式为 schema=host;port=port</param>
     /// <param name="uri">输出解析后的绝对 <see cref="Uri"/>，若解析失败则为 null</param>
     /// <returns>若成功解析为合法 Uri，则返回 true；否则返回 false</returns>
     private static bool TryCreate(this string? str, out Uri? uri)
@@ -102,6 +102,34 @@ public static class ModuleLoaderExtensions
         }
         string url = $"{stack.Key}://{stack.Value}:{value}";
         return Uri.TryCreate(url, UriKind.Absolute, out uri);
+    }
+
+    /// <summary>
+    /// 尝试将格式为 <c>schema=host;Port=port</c> 的连接字符串解析为 <see cref="Uri"/>。
+    /// </summary>
+    /// <param name="str">输入字符串，格式为 schema=host;port=port</param>
+    /// <param name="hosts">输出解析后的绝对 <see cref="Hosts"/>，若解析失败则为 null</param>
+    /// <returns>若成功解析为合法 Uri，则返回 true；否则返回 false</returns>
+    private static bool TryCreate(this string? str, out Hosts hosts)
+    {
+        if (str == null)
+        {
+            return false;
+        }
+        string[] parts = str.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+        foreach (string item in parts)
+        {
+            if (item.TryCreate(out Uri? uri) && uri is not null)
+            {
+                hosts = hosts.Add(uri.Scheme, uri.Host, uri.Port);
+            }
+            else
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     private static Dictionary<string, string> Parse(string connectionString)
