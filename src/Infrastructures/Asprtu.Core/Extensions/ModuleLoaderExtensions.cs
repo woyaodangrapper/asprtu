@@ -53,7 +53,7 @@ public static class ModuleLoaderExtensions
                     Name = name,
                     Type = type,
                     Enabled = enabled,
-                    Config = new MqttServerConfig(serverUri!, image, cfg.GetValue<bool>("Dashboard"))
+                    Config = new MqttServerConfig(serverUri!, image, cfg.GetValue<bool>("dashboard"))
                 },
 
             "mqtt-client" when broker.TryCreate(out Uri? clientUri) =>
@@ -105,7 +105,7 @@ public static class ModuleLoaderExtensions
     }
 
     /// <summary>
-    /// 尝试将格式为 <c>schema=host;Port=port</c> 的连接字符串解析为 <see cref="Uri"/>。
+    /// 尝试将格式为 <c>schema=host;Port=port</c> 的连接字符串解析为 <see cref="Hosts"/>。
     /// </summary>
     /// <param name="str">输入字符串，格式为 schema=host;port=port</param>
     /// <param name="hosts">输出解析后的绝对 <see cref="Hosts"/>，若解析失败则为 null</param>

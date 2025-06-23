@@ -52,6 +52,7 @@ public static class ServiceCollectionExtension
             if (string.IsNullOrEmpty(options.HostList) && moduleProvider.TryGet(out IModule<MqttClientConfig>? mqttClientConfig))
             {
                 options.HostList = mqttClientConfig!.Config.Host.ToString();
+                options.ClientId ??= mqttClientConfig!.Config.ClientId;
                 _mqttServerAddressOverridden(logger, null);
             }
 

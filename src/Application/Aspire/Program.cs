@@ -19,7 +19,7 @@ IResourceBuilder<ContainerResource> mqtt = builder.AddNanomq(options.Name)
 
 if (options.Dashboard)
 {
-    _ = builder.AddGrafana().WaitFor(mqtt);
+    _ = builder.AddMonitoring().WaitFor(mqtt);
 }
 //// 集群模式
 //List<Type> types = [];
@@ -47,14 +47,15 @@ if (options.Dashboard)
 //       .WithReferences(defaultResource)
 //       .WithEnvironment("DOTNET_RUNNING_IN_CONTAINER", "True");
 //});
+
 builder.AddProject<Projects.Asprtu_Capacities_Host>("asprtu-hybrid")
-    .WaitFor(mqtt)
-    .WithAPIsDocs("RESTful")
-    .WithAPIsDocs("GraphQL", "/graphql")
-    .WithReferences(modulesResource)
-    .WithReferences(defaultResource)
-    .WithEndpoint(name: "tcps", scheme: "tcp", port: 11868, targetPort: 1868)
-    .WithEnvironment("DOTNET_RUNNING_IN_CONTAINER", "True");
+   .WaitFor(mqtt)
+   .WithAPIsDocs("RESTful")
+   .WithAPIsDocs("GraphQL", "/graphql")
+   .WithReferences(modulesResource)
+   .WithReferences(defaultResource)
+   .WithEndpoint(name: "tcps", scheme: "tcp", port: 11868, targetPort: 1868)
+   .WithEnvironment("DOTNET_RUNNING_IN_CONTAINER", "True");
 
 builder.AddDashboard();
 builder.UseStartLogging();
