@@ -36,7 +36,6 @@
 		<PackageReference Include="Microsoft.Extensions.ServiceDiscovery" Version="9.3.1" />
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\..\..\BlazorApp1\BlazorApp1.csproj" />
 		<ProjectReference Include="..\Asprtu.Capacities\Asprtu.Capacities.csproj" IsAspireProjectResource="false" />
 		<ProjectReference Include="..\Asprtu.Capacities.Host\Asprtu.Capacities.Host.csproj" />
 	</ItemGroup>
