@@ -4,11 +4,11 @@
 
 	<ItemGroup>
 		<PackageReference Include="Castle.Core" Version="5.2.1" />
-		<PackageReference Include="DotNetCore.CAP" Version="8.3.5" />
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.0-preview.5.25277.114" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.0-preview.5.25277.114" />
-		<PackageReference Include="Microsoft.Orleans.Core.Abstractions" Version="9.2.0-preview3" />
-		<PackageReference Include="MQTTnet" Version="5.0.1.1416" />
+		<PackageReference Include="DotNetCore.CAP" Version="10.0.1" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.3" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.3" />
+		<PackageReference Include="Microsoft.Orleans.Core.Abstractions" Version="10.0.1" />
+		<PackageReference Include="MQTTnet" Version="5.1.0.1559" />
 	</ItemGroup>
 
 	<ItemGroup>

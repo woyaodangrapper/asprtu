@@ -9,12 +9,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Grpc.AspNetCore" Version="2.71.0" />
+		<PackageReference Include="Grpc.AspNetCore" Version="2.76.0" />
 		<PackageReference Include="HotChocolate.AspNetCore" Version="16.0.0-p.3.0" />
 		<PackageReference Include="HotChocolate.AspNetCore.Authorization" Version="16.0.0-p.3.0" />
 		<!--<PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="8.1.2" />-->
-		<PackageReference Include="Scalar.AspNetCore" Version="2.4.13" />
-		<PackageReference Include="Microsoft.Orleans.Server" Version="9.2.0-preview3" />
+		<PackageReference Include="Scalar.AspNetCore" Version="2.12.47" />
+		<PackageReference Include="Microsoft.Orleans.Server" Version="10.0.1" />
 
 		<PackageReference Include="HotChocolate.Types.Analyzers" Version="16.0.0-p.3.0">
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -28,7 +28,7 @@
 
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
-		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0-preview.5.25277.114" />
+		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.3" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\..\Infrastructures\Asprtu.gRPC\Asprtu.Grpc.csproj" />

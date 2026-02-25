@@ -118,9 +118,20 @@ public class NanomqResource(string name) : ContainerResource(name), IResourceWit
     private ReferenceExpression BuildConnectionString()
     {
         ReferenceExpressionBuilder builder = new();
-        builder.Append($"{HttpEndpoint.Property(EndpointProperty.HostAndPort)}");
-        builder.Append($"{PrimaryEndpoint.Property(EndpointProperty.HostAndPort)}");
-        builder.Append($"{WebSocketEndpoint.Property(EndpointProperty.HostAndPort)}");
+        // 只追加已分配的端点
+        if (HttpEndpoint.IsAllocated)
+        {
+            builder.Append($"{HttpEndpoint.Property(EndpointProperty.HostAndPort)}");
+        }
+        if (PrimaryEndpoint.IsAllocated)
+        {
+            builder.Append($"mqtt://{PrimaryEndpoint.Property(EndpointProperty.HostAndPort)}");
+        }
+        else if (WebSocketEndpoint.IsAllocated)
+        {
+            builder.Append($"ws://{WebSocketEndpoint.Property(EndpointProperty.HostAndPort)}");
+        }
+
 
         if (PasswordParameter is not null && UsernameParameter is not null)
         {

@@ -4,7 +4,7 @@ public static class DashboardExtensions
 {
     public static void AddDashboard(this IDistributedApplicationBuilder builder)
     {
-        if (builder.ExecutionContext.IsPublishMode)
+        if (builder is not null && builder.ExecutionContext.IsPublishMode)
         {
             // The name aspire-dashboard is special cased and excluded from the default
             IResourceBuilder<ContainerResource> dashboard = builder.AddContainer("dashboard", "mcr.microsoft.com/dotnet/nightly/aspire-dashboard")
