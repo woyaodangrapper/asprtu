@@ -1,10 +1,11 @@
 ﻿using Asprtu.gRPC.Capacities;
 using Grpc.Core;
 using Microsoft.Extensions.Logging;
+using static Asprtu.gRPC.Capacities.TcpGrpc;
 
 namespace Asprtu.Capacities.Host.Endpoints;
 
-public class TcpGrpc(ILogger<TcpGrpc> logger) : gRPC.Capacities.TcpGrpc.TcpGrpcBase
+public class TcpGrpc(ILogger<TcpGrpc> logger) : TcpGrpcBase
 {
     public override Task<HelloReply> SayHello(HelloRequest request, ServerCallContext context)
     {

@@ -36,7 +36,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Protobuf Include="..\..\Infrastructures\Asprtu.Grpc\Protos\Capacities\*.proto" GrpcServices="Capacities" Link="Grpc\Protos\Capacities\%(RecursiveDir)%(Filename)%(Extension)" ProtoRoot="..\..\Infrastructures\Asprtu.Grpc\" />
+		<Protobuf Include="..\..\Infrastructures\Asprtu.gRPC\Protos\Capacities\*.proto" GrpcServices="Capacities" Link="Grpc\Protos\Capacities\%(RecursiveDir)%(Filename)%(Extension)" ProtoRoot="..\..\Infrastructures\Asprtu.gRPC\" />
 	</ItemGroup>
 
 	<ItemGroup>

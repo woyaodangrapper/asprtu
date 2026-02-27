@@ -6,7 +6,8 @@
 		<IsAspireHost>true</IsAspireHost>
 		<PublishAot>false</PublishAot>
 		<PublishTrimmed>false</PublishTrimmed>
-
+		<!--Aspire CLI 13.1.2 在 Linux + 多 TargetFramework 情况下，内部 dotnet run 选择框架不稳定。-->
+		<TargetFramework>net10.0</TargetFramework> <!--把 AppHost 项目改为单框架-->
 	</PropertyGroup>
 	<ItemGroup>
 		<Content Include="appsettings.json">

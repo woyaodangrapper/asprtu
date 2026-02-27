@@ -19,7 +19,9 @@ IResourceBuilder<ContainerResource> mqtt = builder.AddNanomq(options.Name)
 
 if (options.Dashboard)
 {
-    _ = builder.AddMonitoring().WaitFor(mqtt);
+    _ = builder.AddMonitoring()
+        //.WithHostname("app.dev.crcr.top.com", excludeLocalhost: true)
+        .WaitFor(mqtt);
 }
 //// 集群模式
 //List<Type> types = [];
@@ -55,6 +57,7 @@ builder.AddProject<Projects.Asprtu_Capacities_Host>("asprtu-hybrid")
    .WithReferences(modulesResource)
    .WithReferences(defaultResource)
    .WithEndpoint(name: "tcps", scheme: "tcp", port: 11868, targetPort: 1868)
+   //.WithHostname("api.dev.crcr.top.com", excludeLocalhost: true)
    .WithEnvironment("DOTNET_RUNNING_IN_CONTAINER", "True");
 
 builder.AddDashboard();
